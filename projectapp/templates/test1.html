@@ -1,0 +1,172 @@
+{% extends 'usermain.html' %}
+<html>
+<head>
+    {% block mycontent %}
+    <style>
+        .header {
+            background-color: rgb(224, 243, 215);
+            color: #fff;
+            text-align: center;
+            padding: 2px;
+        }
+
+        .profile-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            justify-content: center;
+            
+        }
+
+        .profile-card {
+            background-color: rgb(224, 243, 215);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.1s ease-in-out;
+        }
+
+        .profile-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .profile-card img {
+            width: 200px;
+            height: 150px;
+            border-radius: 50%;
+            margin-bottom: 15px;
+        }
+
+        .profile-card h2 {
+            margin-bottom: 10px;
+            color: rgb(3, 106, 9);
+        }
+
+        .detail-card {
+            margin-bottom: 15px;
+            background-color: #ecf0f1;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+
+        .detail-label {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .detail-value {
+            color: #555;
+        }
+
+        .attendance-btn {
+            display: block;
+            width: 90%;
+            padding: 10px;
+            text-decoration: none;
+            font-size: 16px;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        .edit-btn{
+            display: block;
+            width: 90%;
+            padding: 10px;
+            text-decoration: none;
+            font-size: 16px;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        .attendance-btn {
+            background-color: #27ae60;
+            margin-top: 10px;
+        }
+
+        .attendance-btn:hover {
+            background-color: #2980b9;
+        }
+
+      
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Your Profile</h1>
+    </div>
+
+    <div class="profile-container">
+        <div class="profile-card">
+            <img src="{{ empdetail.Photo.url }}" alt="Profile Image">
+            <h2>{{ empdetail.Name }}</h2>
+
+            <a href="../../editemp/{{ empdetail.slug }}/" class="edit-btn" style="background-color: #27ae60;">
+                Edit Profile
+            </a>
+
+            <a href="{% url 'update_attendance' empdetail.slug %}" class="attendance-btn">
+               Update Attendance
+            </a>
+        </div>
+
+        <div class="profile-card">
+            <div class="detail-card">
+                <div class="detail-label">DOB:</div>
+                <div class="detail-value">{{ empdetail.DOB }}</div>
+            </div>
+            <div class="detail-card">
+                <div class="detail-label">Gender:</div>
+                <div class="detail-value">{{ empdetail.Gender }}</div>
+            </div>
+            <div class="detail-card">
+                <div class="detail-label">Email:</div>
+                <div class="detail-value">{{ empdetail.Email }}</div>
+            </div>
+            <div class="detail-card">
+                <div class="detail-label">PhoneNo:</div>
+                <div class="detail-value">{{ empdetail.PhoneNo }}</div>
+            </div>
+        </div>
+
+        <div class="profile-card">
+            <div class="detail-card">
+                <div class="detail-label">Address:</div>
+                <div class="detail-value">{{ empdetail.Address }}</div>
+            </div>
+            <div class="detail-card">
+                <div class="detail-label">City:</div>
+                <div class="detail-value">{{ empdetail.City }}</div>
+            </div>
+            <div class="detail-card">
+                <div class="detail-label">State:</div>
+                <div class="detail-value">{{ empdetail.State }}</div>
+            </div>
+            <div class="detail-card">
+                <div class="detail-label">Pincode:</div>
+                <div class="detail-value">{{ empdetail.Pincode }}</div>
+            </div>
+        </div>
+
+        <div class="profile-card">
+            <div class="detail-card">
+                <div class="detail-label">Designation:</div>
+                <div class="detail-value">{{ empdetail.Designation }}</div>
+            </div>
+            <div class="detail-card">
+                <div class="detail-label">Department:</div>
+                <div class="detail-value">{{ empdetail.Department }}</div>
+            </div>
+        </div>
+    </div>
+</body>
+{% endblock %}
+</html>

@@ -1,0 +1,135 @@
+.harsh{
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: linen;
+    height: 100%;
+    width: 100%;
+}
+
+.one{
+    display: flex;
+    left: 37.5rem;  
+    padding-left: 7.5rem;
+                 
+    color: rgb(50, 8, 55);
+    font-size: 4.37rem;
+    font-family: paytone one;
+    text-shadow: 0.12rem 0.12rem lightblue;
+    text-align: center;
+    border-bottom: 0.12rem dotted burlywood;
+}
+
+.logocss1{
+    width:15.62rem;
+    height: 7.5rem;
+    object-fit: contain;
+    object-position: left;
+}
+
+/* Sidebar styles */
+.sidebar {
+    width: 15.62rem;
+    background-color: transparent;
+    
+}
+
+/* Navigation item styles */
+.sidebar ul {
+    list-style: none;
+}
+
+.sidebar li {
+    margin-bottom: 0.62rem;
+}
+
+/* Link styles */
+.sidebar a {
+    text-decoration: none;
+    color: orangered;
+}
+
+.fa {
+    font-size: 1.25rem; /* Adjust the icon size */
+    margin-right: 0.62rem; /* Add spacing between icon and text */
+}
+
+.content {
+    position: absolute;
+    margin-left: 3rem; /* Adjust the margin to account for the sidebar width */
+    color: black; /* Text color for the content area */
+    top: 12rem;
+    text-align: left;
+    padding: 1.25rem;
+    padding-bottom: 0rem;
+    font-size: 1.75rem;
+    border-bottom: 0.12rem dotted burlywood;
+}
+
+.content b{
+    text-align: center;
+    font-size: 3rem;
+    color: rgb(50, 8, 55);
+    
+}
+
+.row11 {position:relative;top: 200px;background-color:rgba(0,0,0.2,0.10) ;width: 100%;box-shadow: 0.12rem 0.12rem 8px 5px ;height: 62.5rem;text-align: center;}
+
+.eblock {
+position: relative;
+top: 0.62rem;   
+width: 100%;
+height : 31.25rem;
+display: flex;
+}
+
+.esys {
+position: relative;
+width : 25%;
+height: 20.62rem;
+box-shadow: 0.12rem 0.12rem rgba(0,0,0.2,0.10);
+}
+
+.esys img{
+object-fit: cover;
+object-position: center;
+width: 90%;
+height : 15.62rem;  
+border-radius: 0.62rem;
+
+}
+
+.faq1{
+width: 100%;
+top: 0.12rem;
+position: relative;
+height: 25rem;
+text-align: left;
+padding-top: 0.62rem;
+padding-bottom: 3.12rem;
+
+}
+
+.row4 {
+display: flex;
+flex-direction: row;
+justify-content: space-around;     /* To space the columns evenly */
+background-color: linen;
+width: 100%;
+top: 0.06rem;
+position: relative;
+height: 16.25rem;
+text-align: left;
+color: black;
+padding: auto;
+border-bottom: #333;
+}
+
+.col {
+padding: 1.25rem;
+padding-top: 0.62rem;
+}
+
+.end{
+position: absolute;
+top: 106.25rem;
+left: 75rem;
+}

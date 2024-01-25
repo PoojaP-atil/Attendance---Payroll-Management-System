@@ -1,0 +1,456 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    height: 100%;
+
+    background-color: rgb(224, 243, 215);
+}
+
+.navbar {
+    width: 100%;
+    height: 3.7rem;
+    grid-template-columns: repeat(6, 1fr);
+    background-color: rgb(3, 106, 9);
+    border-radius: 0.31rem;
+    box-shadow: 0.31rem 0.31rem 0.31rem rgb(217, 241, 241);
+    margin-bottom: 0px;
+}
+
+.pooja {
+
+    padding: 4px;
+    margin-top: 18px;
+    color: cornsilk;
+    text-decoration: none;
+    font-size: 1.06rem;
+    float: none;
+}
+
+.navbar a:hover {
+    margin-bottom: 10px;
+    margin-top: 10px;
+    border-radius: 10px;
+    transition: 0.3s ease;
+}
+
+.navbar-left {
+    display: flex;
+    height: 60px;
+    padding-left: 20px;
+    margin-left: 20px;
+}
+
+.navbar-right {
+    float: right;
+}
+
+.navlogo {
+    width: 9%;
+}
+
+.register a {
+    width: 10%;
+    background-color: rgb(3, 106, 9);
+    color: cornsilk;
+    border-radius: 0.31rem;
+    float: left;
+    padding: 0.75rem;
+    text-decoration: none;
+    font-size: 1.06rem;
+    position: fixed;
+    top: 6.25rem;
+    left: 84.25rem;
+    z-index: 3;
+    transition: transform 0.3s ease;
+
+}
+
+div {
+    color: cornsilk;
+}
+
+.register a:hover {
+    z-index: 300;
+    transform: scale(1.07);
+
+}
+
+.img {
+    display: block;
+    position: relative;
+    width: 20%;
+    max-width: 20%;
+    object-fit: contain;
+    object-position: center;
+    top: 2.5rem;
+    box-shadow: 0.12rem 0.12rem 0.5rem 0.31rem rgb(3, 106, 9);
+}
+
+.img4 {
+    display: block;
+    position: relative;
+    width: 99%;
+    max-width: 99%;
+    object-fit: contain;
+    object-position: center;
+    top: 2.5rem;
+    box-shadow: 0.12rem 0.12rem 0.5rem 0.31rem rgb(3, 106, 9);
+}
+
+.top-right {
+    position: absolute;
+    top: 16rem;
+    left: 55rem;
+}
+
+div h1 {
+    color: rgb(3, 106, 9);
+    font-size: 400%;
+    font-family: cursive;
+    text-shadow: 0.12rem 0.12rem lightblue;
+}
+
+.logocss {
+    position: relative;
+    width: 35.62rem;
+    height: 7.5rem;
+    object-fit: contain;
+    object-position: left;
+    top: 1.25rem;
+}
+
+.welcome {
+    position: absolute;
+    top: 6.62rem;
+    left: 25rem;
+    color: rgb(3, 106, 9);
+    font-size: 3.7rem;
+    font-family: paytone one;
+    text-shadow: 0.12rem 0.12rem lightblue;
+    font-weight: bold;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+div p {
+    color: rgb(19, 46, 2);
+    font-size: 1.75rem;
+    position: absolute;
+    top: 50rem;
+    text-align: center;
+}
+
+.column {
+    padding: auto;
+    top: 56.25rem;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    /* To space the columns evenly */
+    background-color: rgb(224, 243, 215);
+    width: 80%;
+    top: 20.62rem;
+    box-shadow: 0.12rem 0.12rem 0.5rem 0.31rem rgb(3, 106, 9);
+    position: relative;
+    height: 25rem;
+}
+
+.img1 {
+    position: relative;
+    height: 18.75rem;
+    object-fit: contain;
+    object-position: center;
+    justify-content: space-around;
+    top: 0.06rem;
+}
+
+div h2 {
+    color: rgb(3, 106, 9);
+    font-size: 1.87rem;
+    padding: auto;
+}
+
+.row1 {
+    background-color: rgb(234, 245, 228);
+    width: 100%;
+    top: 25rem;
+    box-shadow: 0.12rem 0.12rem 0.5rem 0.31rem rgb(3, 106, 9);
+    position: relative;
+    height: 62.5rem;
+    text-align: center;
+}
+
+.img2 {
+    position: relative;
+    height: 21.87rem;
+    object-fit: contain;
+    object-position: right;
+    justify-content: space-between;
+    top: 1.25rem;
+}
+
+.row2 {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    /* To space the columns evenly */
+    background-color: rgb(234, 245, 228);
+    width: 100%;
+    top: 25rem;
+    position: relative;
+    height: 25rem;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    /* Three columns */
+    grid-template-rows: repeat(3, 15.62rem);
+    /* Three rows, each 6.25rem tall */
+    width: 75rem;
+    /* Set a fixed width for the grid container */
+    margin: 0 auto;
+    /* Center the grid horizontally */
+    padding: 1.25rem;
+}
+
+/* Style the grid items */
+.grid-item {
+    background-color: rgb(234, 245, 228);
+    color: rgb(19, 46, 2);
+    text-align: center;
+    font-size: 1.5rem;
+    border: 0.06rem solid rgb(236, 234, 234);
+    padding-top: 0.93rem;
+    transition: transform 0.3s ease;
+}
+
+.grid-container .grid-item:hover {
+    transform: scale(1.07);
+}
+
+/* Style the bottom content */
+.bottom-content {
+    display: flex;
+    justify-content: center;
+
+}
+
+/* Style the columns */
+.column1 {
+    background-color: rgb(234, 245, 228);
+    color: grey;
+    text-align: center;
+    padding-top: 1.87rem;
+    flex: 1;
+    margin: 0 0.31rem;
+    box-shadow: 0.12rem rgb(3, 106, 9);
+}
+
+.faq {
+    width: 100%;
+    top: 25rem;
+    position: relative;
+    height: 28.12rem;
+    text-align: left;
+    padding-top: 3.12rem;
+    padding-bottom: 3.12rem;
+
+}
+
+.faq-section {
+    width: 90%;
+    margin: 0 auto;
+    padding: 1.25rem;
+
+}
+
+.faq-item {
+    margin-bottom: 1.25rem;
+    padding: 0.62rem;
+    border-bottom: 0.06rem solid gray;
+}
+
+.faq-item h3 {
+    font-size: 1.12rem;
+    color: #333;
+    margin: 0;
+}
+
+.icon {
+    float: right;
+    cursor: pointer;
+    transition: transform 0.2s;
+    /* Add a smooth transition effect */
+}
+
+button {
+    background-color: rgb(3, 106, 9);
+    color: linen;
+    padding: auto;
+    width: 30%;
+    height: 10%;
+}
+
+.mblock {
+    position: relative;
+    top: 0.62rem;
+    width: 100%;
+    height: 31.25rem;
+    display: flex;
+    transition: transform 0.3s ease;
+
+}
+
+.mblock .msys:hover {
+    transform: scale(1.07);
+
+}
+
+.msys {
+    position: relative;
+    width: 25%;
+    height: 20.62rem;
+    border-style: solid;
+    box-shadow: 0.1rem 0.1rem 0.1rem 0.1rem rgb(3, 106, 9);
+    margin-right: 1rem;
+}
+
+.msys img {
+    object-fit: cover;
+    object-position: center;
+    width: 90%;
+    height: 12.5rem;
+    border-radius: 0.62rem;
+
+}
+
+.row3 {
+    background-color: rgb(234, 245, 228);
+    width: 100%;
+    top: 25rem;
+    box-shadow: 0.12rem 0.12rem 0.5rem 0.31rem rgb(3, 106, 9);
+    position: relative;
+    height: 62.5rem;
+    text-align: center;
+}
+
+.row4 {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    /* To space the columns evenly */
+    background-color: rgb(234, 245, 228);
+    width: 100%;
+    top: 0.62rem;
+    position: relative;
+    height: 25rem;
+    text-align: left;
+    color: rgb(3, 106, 9);
+    padding: auto;
+    border-bottom: #333;
+}
+
+.col {
+    padding: 1.25rem;
+    padding-top: 1.25rem;
+}
+
+div ul li a {
+    text-decoration: none;
+    text-align: left;
+}
+
+.end {
+    position: absolute;
+    text-align: right;
+}
+
+.container {
+    background-image: url('/static/images/face.jpg');
+    background-size: cover;
+    box-shadow: 0.12rem 0.12rem 0.5rem 0.31rem rgb(3, 106, 9);
+    height: 70%;
+    margin-top: 150px;
+}
+/* detail page css*/
+
+.form1{
+    width: 60%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 5%;
+    color:  #035f05;
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+}
+
+
+.buttonedit {
+    background-color: rgb(15, 121, 5);
+    color: white;
+    padding: 1px 1px;
+    margin: 1px 0;
+    border: none;
+    cursor: pointer;
+    width: 8%; /* changed to full width */
+    border-radius: 10px;
+    transition:  transform  0.3s ease;
+}
+
+.buttonedit:hover{
+    transform: scale(1.07);
+}
+
+.label1{
+    color:  #035f05;
+    text-align: left;
+    
+}
+
+.css{
+    height: 40px; 
+    width: 100%;  
+    margin: 8px 0; 
+    color: #035f05;
+    background-color: aliceblue;
+    padding-left: 5px;
+    display: inline-block; 
+    border: 1px solid rgb(123, 161, 237); 
+    box-sizing: border-box; 
+    border-radius: 0.56rem; 
+    box-shadow: 1px 1px 1px 1px rgb(199, 217, 80);
+}
+
+.form-container1{
+    display: flex;
+    justify-content: center;
+}
+
+.alert-access {
+    font-size: larger;
+    padding: 15px;
+    width: 15%;
+    margin: 220px auto;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    color: #e64a2b;
+    background-color: #f8d7da;
+    text-align: center;
+  }
+  
+  .alert-access a {
+    display: block;
+    margin: 10px auto;
+    padding: 10px 20px;
+    width: 50px;
+    background-color: #e64a2b;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+  
+  }

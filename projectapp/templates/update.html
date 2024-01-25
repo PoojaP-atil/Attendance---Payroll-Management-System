@@ -1,0 +1,99 @@
+{% extends 'adminmain.html' %}
+<html>
+    {% block mycontent %}
+
+<head>
+    <style>
+
+        .tables {
+            border-collapse: collapse;
+            width: 80%;
+            margin: 20px auto;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .tables th,
+        .tables td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .tables th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .tables tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        .tables td:first-child {
+            border-right: 1px solid #ddd;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        .filter {
+            text-align: right;
+            margin-bottom: 10px;
+        }
+
+        .filter label {
+            margin-right: 10px;
+        }
+
+        .filter select {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        button{
+            width: fit-content;
+            height: fit-content;
+        }
+    </style>
+</head>
+
+<body>
+    
+    <table class="tables">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>In Time</th>
+                <th>Out Time</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+           
+            <form method="post" action="{% url 'updt' %}">
+                {% csrf_token %}
+            <tr>
+                print{{obj.date}}
+                <td><input type="date" value="{{obj.date}}" name="date"></td>
+                <td><input type="time" value="{{obj.in_time}}" name="in_time"></td>
+                <td><input type="time" value="{{obj.out_time}}" name="out_time"></td>
+                <td><select name="status">
+                    <option value="Present" {% if obj.status != 'Absent' %} selected {% endif %}>Present</option>
+                    <option value="Absent" {% if obj.status != 'Present' %} selected {% endif %}>Absent</option>
+                </select></td>
+                <input type="hidden" value="{{obj.id}}" name="id">
+                <td><button type="submit">Submit</button></td>
+            </tr>
+        </form>
+           
+        </tbody>
+    </table>
+    </body>
+    {% endblock %}
+</html>

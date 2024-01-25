@@ -1,0 +1,140 @@
+{% extends 'adminmain.html' %}
+{% load static %}
+<html>
+
+{% block mycontent %}
+<head>
+    <style>
+  /* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Header Styles */
+.one {
+    background-color: #4CAF50;
+    color: #fff;
+    text-align: center;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 52px;
+}
+
+.logocss1 {
+    width: 100px;
+    height: 100px;
+    margin: 0 10px;
+}
+
+/* Content Styles */
+.content {
+    background-color: #e0f3d7;
+    padding: 20px;
+    margin: 1px;
+    border-radius: 10px;
+    height: fit-content;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    font-size: 1.2rem;
+    color: #000;
+}
+
+/* Employee Block Styles */
+.row11 {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.dblock {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    background-color: #e0f3d7;
+}
+
+.esys {
+    margin: 10px;
+    padding: 15px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    max-width: 300px;
+    height: fit-content;
+    transition: transform 0.3s ease-in-out;
+}
+
+.esys:hover {
+    transform: scale(1.05);
+}
+
+.esys img {
+    width: 100%;
+    border-radius: 50%;
+    margin-bottom: 15px;
+    object-position: top;
+}
+
+.esys h3 {
+    color: #343a40;
+    margin-bottom: 10px;
+}
+
+.esys button {
+    background-color: #28a745;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.esys button:hover {
+    background-color: #218838;
+}
+
+    </style>
+</head>
+
+<body class="harsh">
+
+    <div class="one">
+        <img src="{% static 'images/logo.png' %}" class="logocss1"> Welcome To FRABPS
+        <img src="{% static 'images/logo.png' %}" class="logocss1">
+    </div>
+
+    <div class="content">
+        <b>FRABPS Facial Recognition Attendance Based Payment System</b></br>
+        A Face Recognition attendance system with mask detection, customization, & payment capabilities. The best
+        contactless COVID-safe attendance system for your organization.
+    </div>
+
+    <div class="row11">
+        <h2 style="font-size: 2rem; padding-top: 1.25rem;">--- Employees we have ---</h2>
+        <div class="dblock">
+            {% for i in employ %}
+            <div class="esys">
+                <img src="{{i.Photo.url}}">
+                <h3>Name : {{i.Name}}</h3>
+                <h3>Designation : {{i.Designation}}</h3>
+                <h3>Department : {{i.Department}}</h3>
+                <center>
+                    <a href="../empdetail/{{i.slug}}/"><button type="submit" name="submit" value="View Details">View
+                            Details</button></a>
+                </center>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+</body>
+
+</html>
+{% endblock %}
