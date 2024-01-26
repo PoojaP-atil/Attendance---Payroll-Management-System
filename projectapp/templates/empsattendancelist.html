@@ -1,0 +1,35 @@
+<html>
+    <body>
+        <h2> Employees List </h2>
+    <table class="tables">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>In Time</th>
+                <th>Out Time</th>
+                <th>Status</th>
+                <th> </th>
+            </tr>
+        </thead>
+        <tbody>
+           
+            <form method="post" action="{% url 'updt' %}">
+                {% csrf_token %}
+            <tr>
+                print{{obj.date}}
+                <td><input type="date" value="{{obj.date}}" name="date"></td>
+                <td><input type="time" value="{{obj.in_time}}" name="in_time"></td>
+                <td><input type="time" value="{{obj.out_time}}" name="out_time"></td>
+                <td><select name="status">
+                    <option value="Present" {% if obj.status != 'Absent' %} selected {% endif %}>Present</option>
+                    <option value="Absent" {% if obj.status != 'Present' %} selected {% endif %}>Absent</option>
+                </select></td>
+                <input type="hidden" value="{{obj.id}}" name="id">
+                <td><button type="submit">Submit</button></td>
+            </tr>
+        </form>
+           
+        </tbody>
+    </table>
+    </body>
+</html>

@@ -206,9 +206,9 @@ div h2 {
 .grid-container {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    /* Three columns */
+    /* Tadminee columns */
     grid-template-rows: repeat(3, 15.62rem);
-    /* Three rows, each 6.25rem tall */
+    /* Tadminee rows, each 6.25rem tall */
     width: 75rem;
     /* Set a fixed width for the grid container */
     margin: 0 auto;

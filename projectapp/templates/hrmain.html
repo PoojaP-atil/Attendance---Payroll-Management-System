@@ -1,0 +1,254 @@
+<!-- {% load static %}
+<html>
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{% static 'css/mainpage.css' %}">
+    <link rel="stylesheet" href="{% static 'css/list.css' %}">
+</head>
+
+<body>-->
+    <!-- Header
+    <nav>
+     
+        <div class="navbar">
+            <div class="navbar-left">
+                {% if hr.Name %}
+                <img src="{% static 'images/logo.png' %}" class="navlogo">
+                <a href="{% url 'chatgpt' %}" class="pooja" style="padding-left: 20px;"><i class="fa fa-fw fa-home"></i> Dashboard</a>
+                <a href="#" class="pooja" style="padding-left: 20px;">Welcome <i class="fa fa-user-circle" aria-hidden="true"></i>       {{hr.Name}}</a>
+                <form method='POST' action="" style=" margin-bottom: 20px; padding-left: 20px; margin-top: 14px;">
+                    {% csrf_token %}
+                    <input type="search" placeholder="Search" aria-label="Search" name="search_query"
+                        style="height: 30px; width: 150px; margin-top: 4px; padding-left: 10px;">
+                    <button type="submit"
+                        style="height: 30px; width: 70px; background-color: rgb(3, 106, 9); border-color: rgb(3, 106, 9); color: cornsilk;">Search</button>
+                </form>
+           
+               
+                <a class="pooja" style="margin-left: 440px; padding-left: 20px;"><i class="fa fa-fw fa-phone"></i> Contact</a>
+                <a class="pooja" style="padding-left: 20px;"><i class="fa fa-fw fa-envelope"></i> Email</a>
+                <a href="{% url 'hrlogin' %}" class="pooja" style="padding-left: 20px;"><i class="fa fa-fw fa-user"></i> Logout</a>
+                {% else %}
+   
+                <a class="pooja" href="{%url 'hrlogin'%}" style="color: rgb(255, 255, 255);"><b>LOGIN</b></a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+
+    
+    <div class="faq">
+        <h2
+            style="font-size: 3.12rem; padding-top: 1.25rem; text-align: center; padding-bottom: 3.12rem; border-bottom: 0.06rem solid gray;">
+            Ready to find out more?
+            </br>Drop a message. We'll make sure your time is well spent.</h2>
+        <div class="row4">
+            <div class="col">
+                <ul>
+                    <img src="{% static 'images/logo.png' %}"
+                        style="width: 70%; height: 50%; padding-right: 1.87rem; border-right: 0.06rem solid rgb(19, 46, 2);">
+                </ul>
+            </div>
+            <div class="col">
+                <ul style=" padding-right: 3.12rem; border-right: 0.06rem solid rgb(19, 46, 2);">
+                    <li><a href="#" style="font-size: 1.25rem; font-weight: bold; color: rgb(3, 106, 9);">Support</a></li>
+                    <li><a href="{% url 'hrlogin' %}" style="font-size: 1.25rem; font-weight: bold; color: rgb(3, 106, 9);">hr</a></li>
+                    <li><a href="#" style="font-size: 1.25rem; font-weight: bold; color: rgb(3, 106, 9);">About Us</a></li>
+                    <li><a href="#" style="font-size: 1.25rem; font-weight: bold; color: rgb(3, 106, 9);">Contact</a></li>
+                    <li><a href="#" style="font-size: 1.25rem; font-weight: bold; color: rgb(3, 106, 9);">Clients</a></li>
+                    <li><a href="#" style="font-size: 1.25rem; font-weight: bold; color: rgb(3, 106, 9);">Join Us</a></li>
+                    <li><a href="#" style="font-size: 1.25rem; font-weight: bold; color: rgb(3, 106, 9);">Privacy Policy</a></li>
+                </ul>
+            </div>
+            <div class="col">
+                <ul>
+                    <li><a style="font-size: 1.25rem; font-weight: bold; color: rgb(3, 106, 9);">Contact</a></li>
+                    <li><a style="font-size: 1.25rem; font-weight: bold; color: rgb(3, 106, 9);">Address</a></li>
+                    <li><a style="font-size: 1.12rem; color: rgb(19, 46, 2);">2562, 3rd Floor, 14th Cross, 24th Main, Sector 1,
+                            HSR
+                            Layout, </br>Bengaluru 560102, India</a></li>
+                    <li><a style="font-size: 1.25rem; font-weight: bold; color: rgb(3, 106, 9);">Sales</a></li>
+                    <li><a style="font-size: 1.12rem; color: rgb(19, 46, 2);">+91 73530 9999</br>
+                            +91 86107 30231</br>
+                            contact@frabps.in</a></li>
+                    
+                    <li><a style="font-size: 1.25rem; font-weight: bold; color: rgb(3, 106, 9);">Support</a></li>
+                    <li><a style="font-size: 1.12rem; color: rgb(19, 46, 2);">+91 90717 99999</a></li>
+                    <li><a style="font-size: 1.12rem; color: rgb(19, 46, 2);">support@frabps.in</a></li>
+
+
+
+
+                    <li style="padding-top: 40px;"><a href="#"
+                            style="color: rgb(3, 106, 9); text-decoration: none; padding: 10px;"><i
+                                class="fa fa-linkedin"></i></a>
+                        <a href="https://www.instagram.com/accounts/login/"
+                            style="color: rgb(3, 106, 9); text-decoration: none; padding: 10px;"><i
+                                class="fa fa-instagram"></i></a>
+                        <a href="https://www.facebook.com/login.php"
+                            style="color: rgb(3, 106, 9); text-decoration: none; padding: 10px;"><i
+                                class="fa fa-facebook"></i></a>
+                        <a href="https://twitter.com/i/flow/login"
+                            style="color: rgb(3, 106, 9); text-decoration: none; padding: 10px;"><i
+                                class="fa fa-twitter"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html> -->
+
+{% load static %}
+<html>
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{% static 'css/hr.css' %}">
+    <style>
+/* Reset some default styles */
+h1, h2, h3, p, ul {
+    margin: 0;
+    padding: 0;
+}
+
+/* Body styles */
+
+/* Sidebar styles */
+aside {
+    width: 250px;
+    height: 100%;
+    background-color: rgb(3, 106, 9);
+    position: fixed;
+    overflow-y: auto;
+    transition: width 0.3s;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    
+}
+
+.sidebar-header {
+    padding: 20px;
+    text-align: center;
+    background-color: rgb(3, 106, 9);
+}
+
+.sidebar-header h2 {
+    margin: 0;
+    color: #fff;
+}
+
+.sidebar-menu {
+    padding: 20px;
+}
+
+.sidebar-menu ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.sidebar-menu li {
+    margin-bottom: 10px;
+}
+
+.sidebar-menu a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 10px;
+    display: block;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.sidebar-menu a:hover {
+    background-color:rgb(71, 162, 29);
+}
+
+/* Adjust main content to make space for the sidebar */
+main {
+    margin-left: 250px;
+    padding: 20px;
+    transition: margin-left 0.3s;
+}
+
+/* Main Content styles */
+header {
+    background-color: rgb(3, 106, 9);
+    color: #fff;
+    text-align: center;
+    padding: 1em 0;
+    margin-bottom: 20px;
+}
+
+h1 {
+    color: #fff;
+}
+
+h2{
+    color: #333;
+}
+
+section {
+    background-color: rgb(224, 243, 215);
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Footer styles */
+footer {
+    text-align: center;
+    padding: 1em 0;
+    background-color: rgb(3, 106, 9);
+    color: #fff;
+}
+
+/* Responsive styles for small screens */
+@media only screen and (max-width: 600px) {
+    aside {
+        width: 100%;
+    }
+
+    main {
+        margin-left: 0;
+    }
+}
+
+
+    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facial Recognition Attendance & Payment System</title>
+    <!-- Add your CSS styles and external libraries here -->
+    <link rel="stylesheet" href="styles.css">
+    <!-- Add any additional scripts or libraries you may need -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="script.js"></script>
+</head>
+<body>
+
+<!-- Sidebar -->
+<aside>
+    <div class="sidebar-header">
+        <h2>Dashboard</h2>
+    </div>
+    <div class="sidebar-menu">
+        <ul>
+            <li><a href="{% url 'userregister' %}">Add New Employee</a></li>
+            <li><a href="{% url 'hrhome' %}">Employee List</a></li>
+            <li><a href="#payment">Payment</a></li>
+            <li><a href="#settings">Settings</a></li>
+            <li><a href="{% url 'hrlogin' %}">Logout</a></li>
+        </ul>
+    </div>
+</aside>
+
+{% block mycontent %}
+{% endblock %}
+
+
+</body>
+</html>

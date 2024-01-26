@@ -1,9 +1,8 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth.hashers import make_password,check_password
 from django.http import HttpResponse
-from projectapp.models import employee, admins,attendance
+from projectapp.models import employee, hr,attendance, head
 from django.db.models import Q
-from django.views.generic import ListView,DetailView
 from datetime import datetime
 from django.urls import reverse
 
@@ -11,26 +10,26 @@ from django.urls import reverse
 
 # Create your views here.
 def EmpListView(request):
-    admin = request.session['admin']
-    empobj = admins.objects.get(Email = admin)
+    hrs = request.session['hr']
+    empobj = hr.objects.get(Email = hrs)
     employ = employee.objects.all()
-    return render(request,'home.html',{'admin':empobj,'employ':employ})
+    return render(request,'home.html',{'hr':empobj,'employ':employ})
 
 def EmpDetailView(request,slug):
-    admin = request.session['admin']
-    empobj = admins.objects.get(Email = admin)
+    hrs = request.session['hr']
+    empobj = hr.objects.get(Email = hrs)
     employ = employee.objects.get(slug = slug)
-    return render(request,'empdetail.html',{'admin':empobj,'empdetail':employ})
+    return render(request,'empdetail.html',{'hr':empobj,'empdetail':employ})
 
 def Editemp(request,slug):
     if request.method =='GET':
-        admin = request.session['admin']
-        empobj = admins.objects.get(Email = admin)
+        hrs = request.session['hr']
+        empobj = hr.objects.get(Email = hrs)
         employ = employee.objects.get(slug = slug)
         return render(request,'editform.html',{'user':empobj,'empdetail':employ})
     elif request.method =='POST':
-        admin = request.session['admin']
-        empobj = admins.objects.get(Email = admin)
+        hrs = request.session['hr']
+        empobj = hr.objects.get(Email = hrs)
         employ = employee.objects.get(slug = slug)
         employ.Name = request.POST.get('fname')
         employ.Address = request.POST.get('address')
@@ -43,36 +42,36 @@ def Editemp(request,slug):
         employ.save()
         return render(request,'empdetail.html',{'user':empobj,'empdetail':employ})
 
-#navbar for adminpage
-def adminmain(request):
-    return render(request,'adminmain.html')
+#navbar for hrpage
+def hrmain(request):
+    return render(request,'hrmain.html')
 
-#after admin login
-def adminhome(request):
-    if 'admin' in request.session:
-        admin= request.session.get('admin')
-        admobj= admins.objects.get(Email=admin)
-        return render(request, 'adminindex.html', {'admin': admobj,'empdetail': admobj})
+#after hr login
+def hrhome(request):
+    if 'hr' in request.session:
+        hrs= request.session.get('hr')
+        hrobj= hr.objects.get(Email=hrs)
+        return render(request, 'hrindex.html', {'hr': hrobj,'empdetail': hrobj})
     
-#delete user profile from admin
+#delete user profile from hr
 def deleteprofile(request,slug):
-    if 'admin' in request.session:
-        admin= request.session.get('admin')
-        admobj= admins.objects.get(Email=admin)
+    if 'hr' in request.session:
+        hrs= request.session.get('hr')
+        hrobj= hr.objects.get(Email=hrs)
         obj = employee.objects.get(slug=slug)
         obj.delete()
-        return redirect('../../adminhome/')
+        return redirect('../../hrhome/')
     
-#admin edit user details   
-def editempadmin(request,slug):
+#hr edit user details   
+def editemphr(request,slug):
     if request.method =='GET':
-        admin= request.session['admin']
-        admobj= admins.objects.get(Email=admin)
+        hrs= request.session['hr']
+        hrobj= hr.objects.get(Email=hrs)
         employ = employee.objects.get(slug = slug)
-        return render(request,'editformadminend.html',{'admin':admobj,'empdetail':employ})
+        return render(request,'editformhrend.html',{'hr':hrobj,'empdetail':employ})
     elif request.method =='POST':
-        admin= request.session['admin']
-        admobj= admins.objects.get(Email=admin)
+        hrs= request.session['hr']
+        hrobj= hr.objects.get(Email=hrs)
         employ = employee.objects.get(slug = slug)
         employ.Name = request.POST.get('fname')
         employ.Address = request.POST.get('address')
@@ -83,20 +82,20 @@ def editempadmin(request,slug):
         employ.Email = request.POST.get('email')
         employ.Photo = request.FILES.get('photo')
         employ.save()
-        return render(request,'empdetail.html',{'admin':admobj,'empdetail':employ})
+        return render(request,'empdetail.html',{'hr':hrobj,'empdetail':employ})
     
-#update user attendance from admin end
+#update user attendance from hr end
 # def update(request,id):
 #     if request.method == 'GET':
-#         if 'admin' in request.session:
-#             admin= request.session.get('admin')
-#             admobj= admins.objects.get(Email=admin)
+#         if 'hr' in request.session:
+#             hrs= request.session.get('hr')
+#             hrobj= hr.objects.get(Email=hrs)
 #             obj = attendance.objects.get(id=id)
-#             return render(request,'showattendance.html',{'admin':admobj,'obj':obj})
+#             return render(request,'showattendance.html',{'hr':hrobj,'obj':obj})
 #     elif request.method =='POST':
-#         if 'admin' in request.session:
-#             admin= request.session.get('admin')
-#             admobj= admins.objects.get(Email=admin)
+#         if 'hr' in request.session:
+#             hr= request.session.get('hr')
+#             hrobj= hr.objects.get(Email=hr)
 #             dates = request.POST['date']
 #             print(dates)
 #             intime = request.POST.get('in_time')
@@ -116,38 +115,38 @@ def searchbox(request):
         result = employee.objects.filter(Q(Name__icontains= sq) | Q(Designation__icontains= sq) | Q(Department__icontains= sq)|Q(Gender__iexact= sq))
         return render(request, 'home.html', {'listobj':result})
 
-#admin login
-def adminlogin(request):
+#hr login
+def hrlogin(request):
     if request.method=="GET":
-        return render(request,"adminlogin.html")
+        return render(request,"hrlogin.html")
     elif request.method=="POST":
-        admin = request.POST['email']
-        adm = admins.objects.filter(Email = admin)
-        if adm:
-            admobj = admins.objects.get(Email=request.POST.get("email"))
+        hrs = request.POST['email']
+        hrobj = hr.objects.filter(Email = hrs)
+        if hrobj:
+            hrobj = hr.objects.get(Email=request.POST.get("email"))
             passfe = request.POST.get("password")
-            flag = check_password(passfe,admobj.Password)
+            flag = check_password(passfe,hrobj.Password)
 
             if flag:
-                request.session['admin'] = request.POST.get('email')
-                return redirect("../adminindex/")
+                request.session['hr'] = request.POST.get('email')
+                return redirect("../chatgpt/")
             else:
                 error_message = "Wrong credentials !! Oops try again :("
-                return render(request,'adminlogin.html',{'msg':error_message})
+                return render(request,'hrlogin.html',{'msg':error_message})
 
         else:
             error_message = "No User found"
-            return render(request,'adminlogin.html',{'msg':error_message})
+            return render(request,'hrlogin.html',{'msg':error_message})
 
-#admin logout       
-def adminlogout(request):
+#hr logout       
+def hrlogout(request):
     request.session['email'] = ''
-    return redirect('../admin-login/')  
+    return redirect('../hr-login/')  
 
-#adminregister
-def adminregister(request):
+#hrregister
+def hrregister(request):
     if request.method=="GET":
-        return render(request,"adminregister.html")
+        return render(request,"hrregister.html")
     elif request.method=="POST":
         name = request.POST.get("fname")
         designation = request.POST.get("designation")
@@ -155,10 +154,10 @@ def adminregister(request):
         email =request.POST.get("email")
         password= request.POST.get("password")
         passw = make_password(password)
-        adminobj = admins(Name=name, Designation=designation,Department=department,Email=email,Password=passw)
-        adminobj.save()
+        hrobj = hr(Name=name, Designation=designation,Department=department,Email=email,Password=passw)
+        hrobj.save()
 
-        return HttpResponse("Admin registered Successfully")
+        return HttpResponse("hr registered Successfully")
 
 #user view
 
@@ -195,25 +194,49 @@ def userregister(request):
     if request.method=="GET":
         return render(request,"userregister.html")
     elif request.method=="POST":
-        name = request.POST.get("fname")
-        photo =request.FILES.get("photo")
-        gender = request.POST.get("gender")
-        dateofbirth = request.POST.get("DOB")
-        address = request.POST.get("address")
-        state = request.POST.get("state")
-        city = request.POST.get("city")
-        designation = request.POST.get("designation")
-        department = request.POST.get("department")
-        pincode = request.POST.get("pincode")
-        phoneno = request.POST.get("phone")
-        email =request.POST.get("email")
-        password= request.POST.get("password")
-        passw = make_password(password)
-        empobj = employee(Name=name, Photo = photo,Gender=gender,Designation=designation,Department=department,City = city,DOB = dateofbirth,Address=address,State=state,Pincode=pincode,PhoneNo=phoneno,Email=email,Password=passw)
-        empobj.save()
+        if request.POST.get('designation') == 'Section Head':
+            name = request.POST.get("fname")
+            photo =request.FILES.get("photo")
+            gender = request.POST.get("gender")
+            dateofbirth = request.POST.get("DOB")
+            address = request.POST.get("address")
+            state = request.POST.get("state")
+            city = request.POST.get("city")
+            designation = request.POST.get("designation")
+            department = request.POST.get("department")
+            pincode = request.POST.get("pincode")
+            phoneno = request.POST.get("phone")
+            email =request.POST.get("email")
+            password= request.POST.get("password")
+            passw = make_password(password)
+            slugobj = name+'-'+designation
+            head1 = 'HR'
+            empobj = head(Name=name, Photo = photo,Gender=gender,Designation=designation,Department=department, City = city,DOB = dateofbirth,Address=address,State=state,Pincode=pincode,PhoneNo=phoneno,Email=email,Password=passw,slug=slugobj)
+            empobj.save()
+            emp1obj = employee(Name=name, Photo = photo,Gender=gender,Designation=designation,Department=department, Head=head1, City = city,DOB = dateofbirth,Address=address,State=state,Pincode=pincode,PhoneNo=phoneno,Email=email,Password=passw,slug=slugobj)
+            emp1obj.save()
+        else:
+            name = request.POST.get("fname")
+            photo =request.FILES.get("photo")
+            gender = request.POST.get("gender")
+            dateofbirth = request.POST.get("DOB")
+            address = request.POST.get("address")
+            state = request.POST.get("state")
+            city = request.POST.get("city")
+            designation = request.POST.get("designation")
+            department = request.POST.get("department")
+            head1 = request.POST.get("head")
+            pincode = request.POST.get("pincode")
+            phoneno = request.POST.get("phone")
+            email =request.POST.get("email")
+            password= request.POST.get("password")
+            passw = make_password(password)
+            slugobj = name+'-'+designation
+            empobj = employee(Name=name, Photo = photo,Gender=gender,Designation=designation,Department=department, Head=head1, City = city,DOB = dateofbirth,Address=address,State=state,Pincode=pincode,PhoneNo=phoneno,Email=email,Password=passw,slug=slugobj)
+            empobj.save()
 
         return HttpResponse("Customer registered Successfully")
-    
+        
 #navbar for userpage
 def usermain(request):
     return render(request,'usermain.html')
@@ -277,11 +300,11 @@ def attendancelist(request):
 
         return render(request,'showattendance.html',{'user':empobj,'attobj':attobj})
 
-#attendance list at admin end   
-def adminattendancelist(request):
+#attendance list at hr end   
+def hrattendancelist(request):
     if request.method== "POST":
-        admin= request.session['admin']
-        empobj= admins.objects.get(Email=admin)
+        hrs= request.session['hr']
+        empobj= hr.objects.get(Email=hrs)
         obj = request.POST['eid']
         print(obj)
         attobj = attendance.objects.filter(employee_id= obj)
@@ -292,7 +315,7 @@ def adminattendancelist(request):
         else:
             attobj = attendance.objects.filter(employee_id=obj)
 
-        return render(request,'showattendanceadmin.html',{'admin':empobj,'attobj':attobj})
+        return render(request,'showattendancehr.html',{'hr':empobj,'attobj':attobj})
 
 # attendance marking from user end
 def attendanceup(request,slug):
@@ -317,19 +340,19 @@ def attendanceup(request,slug):
         attobj.save()
         return redirect('../../showattendance/')
         
-#attendance update form at admin end   
-def attendanceupadmin(request,slug):
+#attendance update form at hr end   
+def attendanceuphr(request,slug):
     if request.method == 'GET':
         current_time = datetime.now().strftime('%H:%M:%S')   
         print(current_time)
-        admin= request.session['admin']
-        admobj= admins.objects.get(Email=admin)
+        hrs= request.session['hr']
+        hrobj= hr.objects.get(Email=hrs)
         empobj = employee.objects.get(slug = slug)
         print(empobj.id)
-        return render(request,'attendanceupadmin.html',{'admin':admobj,'empobj1':empobj,'time':current_time})
+        return render(request,'attendanceuphr.html',{'hr':hrobj,'empobj1':empobj,'time':current_time})
     elif request.method == 'POST':
-        admin= request.session['admin']
-        admobj= admins.objects.get(Email=admin)
+        hrs= request.session['hr']
+        hrobj= hr.objects.get(Email=hrs)
         empobj = employee.objects.get(slug = slug)
         emp = request.POST.get('empid')
         date = request.POST.get('date')
@@ -342,26 +365,41 @@ def attendanceupadmin(request,slug):
         return redirect(url)
 
 
-def adminshow(request, slug):
-    admin= request.session.get('admin')
-    admobj= admins.objects.get(Email=admin)
-    emp= employee.objects.get(slug= slug)
-    atobj= attendance.objects.filter(employee_id=emp.id)
-    return render(request, 'showattendanceadmin.html',{'admin':admobj,'empobj':emp,'attobj':atobj})
+def hrshow(request, slug):
+    if request.method == 'GET':
+        hrs= request.session.get('hr')
+        hrobj= hr.objects.get(Email=hrs)
+        emp= employee.objects.get(slug= slug)
+        atobj= attendance.objects.filter(employee_id=emp.id)
+        return render(request, 'showattendancehr.html',{'hr':hrobj,'empobj':emp,'attobj':atobj})
+    elif request.method== "POST":
+        hrs= request.session['hr']
+        empobj= hr.objects.get(Email=hrs)
+        obj = request.POST['eid']
+        print(obj)
+        attobj = attendance.objects.filter(employee_id= obj)
+        selected_month = request.POST.get('monthFilter')
+
+        if selected_month:
+            attobj = attendance.objects.filter(date__month=selected_month,employee_id=obj)
+        else:
+            attobj = attendance.objects.filter(employee_id=obj)
+
+        return render(request,'showattendancehr.html',{'hr':empobj,'attobj':attobj})
 
 def update(request, id):
-    if 'admin' in request.session:
-            admin= request.session.get('admin')
-            admobj= admins.objects.get(Email=admin)
+    if 'hr' in request.session:
+            hrs= request.session.get('hr')
+            hrobj= hr.objects.get(Email=hrs)
             obj = attendance.objects.get(id=id)
-            return render(request,'update.html',{'admin':admobj,'obj':obj})
+            return render(request,'update.html',{'hr':hrobj,'obj':obj})
     
 
-# for update atndce in admin panel 
+# for update atndce in hr panel 
 def updt(request):
     if request.method=="POST":
-        admin= request.session.get('admin')
-        admobj= admins.objects.get(Email=admin)
+        hrs= request.session.get('hr')
+        hrobj= hr.objects.get(Email=hrs)
         dates = request.POST['date']
         print(dates)
         id=  request.POST['id']
@@ -378,3 +416,8 @@ def updt(request):
         upobj.save()
         url= reverse('showattendance1', args=[slugf])
         return redirect(url)
+    
+def chatgpt(request):
+    hrs= request.session['hr']
+    hrobj= hr.objects.get(Email=hrs)
+    return render(request,'chatgpt.html',{'hr':hrobj})

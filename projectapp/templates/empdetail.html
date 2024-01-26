@@ -1,55 +1,76 @@
-{% extends 'adminmain.html' %}
+{% extends 'hrmain.html' %}
+
+{% block mycontent %}
 <html>
 <head>
-    {% block mycontent %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
+        
+
         .header {
-            background-color: rgb(224, 243, 215);
+            background-color: rgb(3, 106, 9);;
             color: #fff;
-            text-align: center;
-            padding: 2px;
+            padding: 20px;
+            margin-left: 240px;
         }
 
         .profile-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             gap: 20px;
-            justify-content: center;
-            
+            padding: 20px;
+            margin-left: 260px;
         }
 
         .profile-card {
-            background-color: rgb(224, 243, 215);
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
             text-align: center;
-            transition: transform 0.1s ease-in-out;
-        }
-
-        .profile-card:hover {
-            transform: translateY(-5px);
         }
 
         .profile-card img {
-            width: 200px;
+            width: 150px;
             height: 150px;
             border-radius: 50%;
             margin-bottom: 15px;
         }
 
-        .profile-card h2 {
-            margin-bottom: 10px;
-            color: rgb(3, 106, 9);
+        .buttons-container {
+            display: flex;
+            gap: 20px;
+        }
+
+        .edit-btn {
+            padding: 10px;
+            text-decoration: none;
+            font-size: 16px;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        .edit-btn {
+            background-color: rgb(3, 106, 9);
+        }
+
+        .edit-btn:hover {
+            background-color: #27ae60;
+        }
+
+        .info-card {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: left;
+            width: 300px;
         }
 
         .detail-card {
             margin-bottom: 15px;
-            background-color: #ecf0f1;
-            padding: 15px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            text-align: left;
+            
         }
 
         .detail-label {
@@ -60,79 +81,34 @@
         .detail-value {
             color: #555;
         }
-
-        .attendance-btn {
-            display: block;
-            width: 80%;
-            padding: 10px;
-            text-decoration: none;
-            font-size: 16px;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease-in-out;
-            background-color: #27ae60;
-            margin-top: 10px;
-            
-        }
-        .edit-btn {
-            display: block;
-            width: 80%;
-            padding: 10px;
-            text-decoration: none;
-            font-size: 16px;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease-in-out;
-            background-color: #27ae60;
-            margin-top: 10px;
-            padding-top: 20px;
-        }
-
-        .edit-btn:hover {
-            background-color: #2980b9;
-        }
-
-
-        .attendance-btn:hover {
-            background-color: #2980b9;
-        }
-
-      
     </style>
 </head>
 <body>
     <div class="header">
-        <h1>{{empdetail.Name}}'s Profile</h1>
+        <center>
+        <h1 style="color: #fff;">{{ empdetail.Name }}'s Profile</h1></center>
     </div>
 
     <div class="profile-container">
         <div class="profile-card">
             <img src="{{ empdetail.Photo.url }}" alt="Profile Image">
-            <h2>{{ empdetail.Name }}</h2>
-            <div style="display: grid; grid-template-columns: repeat(2,1fr);">
-            <a href="../../editempadmin/{{ empdetail.slug }}/" class="edit-btn">
-                Edit Profile
-            </a>
-
-            <a href="{% url 'attendanceupadmin' empdetail.slug %}" class="attendance-btn">
-               Update Attendance
-            </a>
-
-            <a href="{% url 'deleteprofile' empdetail.slug %}" class="edit-btn">
-                Delete Profile
-             </a>
-
-            <a href="{% url 'showattendance1' empdetail.slug %}" class="attendance-btn">
-                Attendance Summary
-            </a>
+            <div class="buttons-container">
+                <a href="../../editemphr/{{ empdetail.slug }}/" class="edit-btn">
+                    Edit Profile
+                </a>
+                <a href="{% url 'attendanceuphr' empdetail.slug %}" class="edit-btn">
+                   Update Attendance
+                </a>
+                <a href="{% url 'deleteprofile' empdetail.slug %}" class="edit-btn">
+                    Delete Profile
+                </a>
+                <a href="{% url 'showattendance1' empdetail.slug %}" class="edit-btn">
+                    Attendance Summary
+                </a>
+            </div>
         </div>
-        </div>
-
-        <div class="profile-card">
+<div style="display: grid; grid-template-columns: repeat(3,1fr); gap: 10px;">
+        <div class="info-card">
             <div class="detail-card">
                 <div class="detail-label">DOB:</div>
                 <div class="detail-value">{{ empdetail.DOB }}</div>
@@ -151,7 +127,7 @@
             </div>
         </div>
 
-        <div class="profile-card">
+        <div class="info-card">
             <div class="detail-card">
                 <div class="detail-label">Address:</div>
                 <div class="detail-value">{{ empdetail.Address }}</div>
@@ -170,7 +146,7 @@
             </div>
         </div>
 
-        <div class="profile-card">
+        <div class="info-card">
             <div class="detail-card">
                 <div class="detail-label">Designation:</div>
                 <div class="detail-value">{{ empdetail.Designation }}</div>
@@ -181,6 +157,7 @@
             </div>
         </div>
     </div>
+</div>
 </body>
-{% endblock %}
 </html>
+{% endblock %}

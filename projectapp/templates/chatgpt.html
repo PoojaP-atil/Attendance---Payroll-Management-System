@@ -1,0 +1,37 @@
+{% extends 'hrmain.html' %}
+{% load static %}
+<html>
+
+<body>
+
+{% block mycontent %}
+<main>
+
+    <!-- Header Section -->
+    <header>
+        <h1>Welcome {{hr.Name}}</h1>
+    </header>
+
+    <!-- Content Sections -->
+    <section id="attendance">
+        <h2>Facial Recognition Attendance</h2>
+        <div id="attendance-info"></div>
+    </section>
+
+    <section id="payment">
+        <h2>Payment Processing</h2>
+        <div id="payment-info"></div>
+    </section>
+
+    <section id="settings">
+        <h2>System Settings</h2>
+        <div id="system-settings"></div>
+    </section>
+
+</main>
+
+{% endblock %}
+
+
+</body>
+</html>

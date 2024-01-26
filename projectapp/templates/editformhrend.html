@@ -1,0 +1,99 @@
+{% extends 'hrmain.html' %}
+<html>
+<body>
+    {% block mycontent %}
+    <h1 style="margin-left:800px ; color: #035f05; padding-top: 20px;">
+        Edit Profile
+    </h1>
+    <div class="form-container1">
+       
+        <form method="POST" enctype="multipart/form-data" >
+            {% csrf_token %}
+            
+        <div class="form1">
+            
+            <div class="left">
+                
+            <label for="name" class="label1">Name : </label><input class="css" type="text" placeholder="Enter Name" name="fname" value="{{empdetail.Name}}"required ></br>
+
+            <label  for="dateofbirth" class="label1">Date Of Birth : </label><label class="css" type="text" name="dob" placeholder="Enter DOB" value="{{empdetail.DOB}}" style="padding-top: 10px;">{{empdetail.DOB}}</label><br>
+            
+            <label  for="gender" class="label1">Gender : </label><label class="css" type="text" name="gender" placeholder="Enter Gender" value="{{empdetail.Gender}}" style="padding-top: 10px;">{{empdetail.Gender}}</label><br>
+            
+            <label for="address" class="label1">Address : </label><input class="css" type="text" name="address" placeholder="Enter Address" value="{{empdetail.Address}}"><br>
+
+            <label for="city" class="label1">City : </label><input class="css" type="text" id="city" name="city" placeholder="Enter City" value="{{empdetail.City}}"><br>
+          
+            <label for="pincode" class="label1">Pincode : </label><input class="css" type="text" id="pin" name="pincode" placeholder="Enter Pincode" value="{{empdetail.Pincode}}"><br>
+        </div>
+        <div class="right">
+        
+           <label for="state" class="label1"> State : </label><select name="state" id="state" style="height: 40px; width: 100%;  margin: 8px 0; display: inline-block; border: 1px solid rgb(123, 161, 237); box-sizing: border-box; border-radius: 0.56rem; box-shadow: 1px 1px 1px 1px rgb(199, 217, 80);">
+                <option value="">{{empdetail.State}}</option>
+                <option value="Andaman and Nicobar Islands">Andaman and Nicobar Islands</option>
+                <option value="Andhra Pradesh">Andhra Pradesh</option>
+                <option value="Arunachal Praddesh">Arunachal Pradesh</option>
+                <option value="Assam">Assam</option>
+                <option value="Bihar">Bihar</option>
+                <option value="Chandigarh">Chandigarh</option>
+                <option value="Chhattisgarh">Chhattisgarh</option>
+                <option value="Dadra and Nagar Haveli">Dadra and Nagar Haveli</option>
+                <option value="Daman and Diu">Daman and Diu</option>
+                <option value="Delhi">Delhi</option>
+                <option value="Goa">Goa</option>
+                <option value="Gujarat">Gujarat</option>
+                <option value="Haryana">Haryana</option>
+                <option value="Himachal Pradesh">Himachal Pradesh</option>
+                <option value="Jammu and Kashmir">Jammu and Kashmir</option>
+                <option value="Jharkhand">Jharkhand</option>
+                <option value="Karnataka">Karnataka</option>
+                <option value="Kerala">Kerala</option>
+                <option value="Ladakh">Ladakh</option>
+                <option value="Lakshadweep">Lakshadweep</option>
+                <option value="Madhya Pradesh">Madhya Pradesh</option>
+                <option value="Maharashtra">Maharashtra</option>
+                <option value="Manipur">Manipur</option>
+                <option value="Meghalaya">Meghalaya</option>
+                <option value="Mizoram">Mizoram</option>
+                <option value="Nagaland">Nagaland</option>
+                <option value="Odisha">Odisha</option>
+                <option value="Puducherry">Puducherry</option>
+                <option value="Punjab">Punjab</option>
+                <option value="Rajasthan">Rajasthan</option>
+                <option value="Sikkim">Sikkim</option>
+                <option value="Tamil Nadu">Tamil Nadu</option>
+                <option value="Telangana">Telangana</option>
+                <option value="Tripura">Tripura</option>
+                <option value="Uttar Pradesh">Uttar Pradesh</option>
+                <option value="Uttarakhand">Uttarakhand</option>
+                <option value="West Bengal">West Bengal</option>
+            </select>  
+       
+            <label for="designation" class="label1">Designation : </label><select name="designation" id="designation" style="height: 40px; width: 100%;  margin: 8px 0; display: inline-block; border: 1px solid rgb(123, 161, 237); box-sizing: border-box; border-radius: 0.56rem; box-shadow: 1px 1px 1px 1px rgb(199, 217, 80);">
+                <option value="">{{empdetail.Designation}}</option>
+                
+            </select>
+
+            <label for="department" class="label1">Department : </label><select name="department" id="department" style="height: 40px; width: 100%;  margin: 8px 0; display: inline-block; border: 1px solid rgb(123, 161, 237); box-sizing: border-box; border-radius: 0.56rem; box-shadow: 1px 1px 1px 1px rgb(199, 217, 80);">
+                <option value="">{{empdetail.Department}}</option>
+                
+            </select>
+
+            <label for="phone" class="label1">PhoneNo : </label><input class="css" type="tel" id="mobile" name="phone" placeholder="Enter 10 digits Mobile Number" value="{{empdetail.PhoneNo}}"><br>
+
+            <label for="email" class="label1">Email : </label> <input class="css" type="text" placeholder="Enter Email" name="email" id="email" value="{{empdetail.Email}}" required><br>
+
+            <label for="photo" class="label1">Upload Photo</label>
+            <input type="file" placeholder="Browse Photo to Upload" name="photo" id="upload" style="width: 100%; color:  #035f05; height: 40px; padding: 12px 15px; margin: 8px 0; border: 1px solid rgb(123, 161, 237); box-sizing: border-box; border-radius: 0.56rem; box-shadow: 1px 1px 1px 1px rgb(199, 217, 80);"></br>
+
+        </div>
+        </div>
+   <center>
+       <button type="submit" id="Register" class="buttonedit">Save Changes</button></br></center>
+        </form>
+        
+    </div>
+    {% endblock %}
+</body>
+</html>
+

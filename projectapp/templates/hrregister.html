@@ -1,0 +1,124 @@
+{% load static %}
+<html>
+<head>
+    <style>
+        body {
+            font-family: sans-serif;
+            background-image: url('/static/images/register.jpg');
+            background-size: cover; /* changed to cover */
+            margin: 0; /* added to remove default margin */
+            display: flex;
+            justify-content: center;
+            height: 100vh; /* added to make it full height of the viewport */
+        }
+
+        .form-container {
+            text-align: center; /* Center the content */
+        }
+
+        .form {
+            background-color: rgba(141, 209, 156, 0.5);
+            padding: 20px;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 800px; /* added to set a maximum width */
+            display: flex;
+            border: 2px solid rgb(25, 172, 12);
+            box-shadow: 5px 5px 5px 5px rgba(141, 209, 156, 0.5);
+        }
+
+        .left,
+        .right {
+            width: 50%; /* added to split into two columns */
+            padding: 0 10px; /* added for spacing */
+            text-align: left;
+        }
+
+        input[type="text"],
+        input[type="password"],
+        input[type="date"],
+        input[type="tel"] {
+            width: 100%;
+            padding: 12px 15px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid rgba(141, 209, 156, 0.5);
+            box-sizing: border-box;
+            border-radius: 0.56rem;
+            box-shadow: 1px 1px 1px 1px rgba(141, 209, 156, 0.5);
+        }
+
+        /* ... (rest of your styles) */
+
+        button {
+            background-color: rgb(15, 121, 5);
+            color: white;
+            padding: 1rem 10px;
+            margin: 10px 0;
+            border: none;
+            cursor: pointer;
+            width: 20%; /* changed to full width */
+            border-radius: 10px;
+            transition:  transform  0.3s ease;
+        }
+
+        button:hover{
+            transform: scale(1.07);
+        }
+
+        label{
+            color:  #035f05;
+            text-align: left;
+        }
+        /* ... (rest of your styles) */
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <center><h2><img src="{% static 'images/logo.png' %}" style="height: 90px; width: 9.37rem;"></br>HR Registration Form</h2></center>
+        <form method="POST" enctype="multipart/form-data" >
+            {% csrf_token %}
+            
+        <div class="form">
+        
+        <div class="left">
+
+            <!-- Left side content -->
+            <input type="text" placeholder="Enter Name" name="fname" required></br>
+
+            <select name="designation" id="designation" style="height: 40px; width: 100%;  margin: 8px 0; display: inline-block; border: 1px solid rgb(123, 161, 237); box-sizing: border-box; border-radius: 0.56rem; box-shadow: 1px 1px 1px 1px rgb(199, 217, 80);">
+                <option value="">Select Designation</option>
+                <option value="Manager">Manager</option>
+                <option value="Assistant Manager">Assistant Manager</option>
+                <option value="Section Head">Section Head</option>
+                <option value="Superviser">Superviser</option>
+                <option value="Executive">Executive</option>
+                <option value="Accountant">Accountant</option>
+                <option value="Clerk">Clerk</option>
+            </select>
+
+            <select name="department" id="department" style="height: 40px; width: 100%;  margin: 8px 0; display: inline-block; border: 1px solid rgb(123, 161, 237); box-sizing: border-box; border-radius: 0.56rem; box-shadow: 1px 1px 1px 1px rgb(199, 217, 80);">
+                <option value="">Select Department</option>
+                <option value="Admin">Admin</option>
+                <option value="HR">HR</option>
+                <option value="Accounts">Accounts</option>
+                <option value="Operations">Operations</option>
+                <option value="IT">IT</option>
+                <option value="Finance">Finance</option>
+                <option value="Marketing">Marketing</option>
+                <option value="Production">Production</option>
+            </select>
+
+            <input type="text" placeholder="Enter Email" name="email" id="email" required><br>
+
+            <input type="password" placeholder="Enter Password" name="password" required></br>
+
+            
+        </div>
+    </div>
+        <center><button type="submit" id="Register" class="button">Register</button></center></br>
+        </form>
+        <p>Already have an account? <a href="{% url 'hrlogin' %}">Sign in</a>.</p>
+    </div>
+</body>
+</html>

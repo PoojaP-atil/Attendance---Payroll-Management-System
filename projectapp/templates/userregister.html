@@ -7,18 +7,21 @@
             background-image: url('/static/images/register.jpg');
             background-size: cover; /* changed to cover */
             margin: 0; /* added to remove default margin */
-            display: flex;
             justify-content: center;
             height: 100vh; /* added to make it full height of the viewport */
+           
         }
 
         .form-container {
             text-align: center; /* Center the content */
+            margin-left: 300px;
+            padding-top: 8px;
         }
 
         .form {
             background-color: rgba(141, 209, 156, 0.5);
             padding: 20px;
+            margin:auto;
             border-radius: 20px;
             width: 100%;
             max-width: 800px; /* added to set a maximum width */
@@ -70,12 +73,81 @@
             color:  #035f05;
             text-align: left;
         }
+
+        aside {
+    width: 250px;
+    height: 100%;
+    background-color: rgb(3, 106, 9);
+    position: fixed;
+    overflow-y: auto;
+    transition: width 0.3s;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar-header {
+    padding: 20px;
+    text-align: center;
+    background-color: rgb(3, 106, 9);
+}
+
+.sidebar-header h2 {
+    margin: 0;
+    color: #fff;
+}
+
+.sidebar-menu {
+    padding: 20px;
+}
+
+.sidebar-menu ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.sidebar-menu li {
+    margin-bottom: 10px;
+}
+
+.sidebar-menu a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 10px;
+    display: block;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.sidebar-menu a:hover {
+    background-color:rgb(71, 162, 29);
+}
+
+
+
         /* ... (rest of your styles) */
     </style>
 </head>
 <body>
+    <div>
+    <!-- Sidebar -->
+<aside>
+    <div class="sidebar-header">
+        <h2>Dashboard</h2>
+    </div>
+    <div class="sidebar-menu">
+        <ul>
+            <li><a href="{% url 'userregister' %}">Add New Employee</a></li>
+            <li><a href="{% url 'hrhome' %}">Employee List</a></li>
+            <li><a href="#attendance">Attendance</a></li>
+            <li><a href="#payment">Payment</a></li>
+            <li><a href="#settings">Settings</a></li>
+            <li><a href="{% url 'hrlogin' %}">Logout</a></li>
+        </ul>
+    </div>
+</aside>
+
     <div class="form-container">
-        <center><h2><img src="{% static 'images/logo.png' %}" style="height: 90px; width: 9.37rem;"></br>User Registration Form</h2></center>
+        <center><h2><img src="{% static 'images/logo.png' %}" style="height: 90px; width: 9.37rem;"></br> Register New Employee</h2></center>
         <form method="POST" enctype="multipart/form-data" >
             {% csrf_token %}
             
@@ -149,7 +221,7 @@
                 <option value="">Select Designation</option>
                 <option value="Manager">Manager</option>
                 <option value="Assistant Manager">Assistant Manager</option>
-                <option value="Section Head">Section Head</option>
+                <option value="Section Head" id="head">Section Head</option>
                 <option value="Superviser">Superviser</option>
                 <option value="Executive">Executive</option>
                 <option value="Accountant">Accountant</option>
@@ -158,14 +230,22 @@
 
             <select name="department" id="department" style="height: 40px; width: 100%;  margin: 8px 0; display: inline-block; border: 1px solid rgb(123, 161, 237); box-sizing: border-box; border-radius: 0.56rem; box-shadow: 1px 1px 1px 1px rgb(199, 217, 80);">
                 <option value="">Select Department</option>
-                <option value="HR">HR</option>
                 <option value="Admin">Admin</option>
+                <option value="HR">HR</option>
                 <option value="Accounts">Accounts</option>
                 <option value="Operations">Operations</option>
                 <option value="IT">IT</option>
                 <option value="Finance">Finance</option>
                 <option value="Marketing">Marketing</option>
                 <option value="Production">Production</option>
+            </select>
+
+            <select name="head" id="Section Head" style="height: 40px; width: 100%;  margin: 8px 0; display: inline-block; border: 1px solid rgb(123, 161, 237); box-sizing: border-box; border-radius: 0.56rem; box-shadow: 1px 1px 1px 1px rgb(199, 217, 80);">
+                <option value="">Select Head</option>
+                <option value="Pooja">Pooja</option>
+                <option value="Harsh">Harsh</option>
+                <option value="Rashi">Rashi</option>
+                <option value="Viraj">Viraj</option>
             </select>
 
             <input type="text" placeholder="Enter Email" name="email" id="email" required><br>
@@ -178,9 +258,32 @@
             
         </div>
     </div>
-        <center><button type="submit" id="Register" class="button">Register</button></center></br>
+        <center><button type="submit" id="Register" class="button">Register</button></center>
+
         </form>
-        <p>Already have an account? <a href="{% url 'userlogin' %}">Sign in</a>.</p>
+        Already have an account? <a href="{% url 'userlogin' %}">Sign in .</a>
+
     </div>
+    </div>
+    <script>
+        // JavaScript to enable/disable "Select Head" based on "Designation"
+        document.addEventListener('DOMContentLoaded', function () {
+            var designationSelect = document.getElementById('designation');
+            var headSelect = document.getElementById('Section Head');
+
+            // Initial state
+            toggleHeadSelect();
+
+            // Event listener for changes in "Designation" dropdown
+            designationSelect.addEventListener('change', function () {
+                toggleHeadSelect();
+            });
+
+            function toggleHeadSelect() {
+                // Enable "Select Head" if the selected designation is "Section Head"
+                headSelect.disabled = designationSelect.value == 'Section Head';
+            }
+        });
+    </script>
 </body>
 </html>

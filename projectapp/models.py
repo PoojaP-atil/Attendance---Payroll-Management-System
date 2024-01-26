@@ -9,6 +9,7 @@ class employee(models.Model):
     DOB = models.DateField()
     Designation = models.CharField(max_length=200)
     Department = models.CharField(max_length=200)
+    Head = models.CharField(max_length=200,default='')
     Address = models.CharField(max_length=500)
     City = models.CharField(max_length=200)
     State = models.CharField(max_length=200)
@@ -21,7 +22,7 @@ class employee(models.Model):
     class Meta:
         db_table = 'employee'
 
-class admins(models.Model):
+class hr(models.Model):
     Name = models.CharField(max_length=200)
     Designation = models.CharField(max_length=200)
     Department = models.CharField(max_length=200)
@@ -29,7 +30,27 @@ class admins(models.Model):
     Password = models.CharField(max_length=200)
 
     class Meta:
-        db_table = 'admins'
+        db_table = 'hr'
+
+class head(models.Model):
+    gender = (('Male','Male'),('Female','Female')) 
+    Photo = models.ImageField(upload_to='media')
+    Name = models.CharField(max_length=200)
+    Gender = models.CharField(max_length=200, choices = gender)
+    DOB = models.DateField()
+    Designation = models.CharField(max_length=200)
+    Department = models.CharField(max_length=200)
+    Address = models.CharField(max_length=500)
+    City = models.CharField(max_length=200)
+    State = models.CharField(max_length=200)
+    Pincode = models.IntegerField()
+    PhoneNo = models.BigIntegerField()  
+    Email = models.EmailField()
+    Password = models.CharField(max_length=200)
+    slug = models.SlugField(default='',null=False)
+
+    class Meta:
+        db_table = 'head'
 
 class attendance(models.Model):
     employee = models.ForeignKey(employee, on_delete=models.CASCADE)

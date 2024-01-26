@@ -1,0 +1,131 @@
+{% load static %}
+<html>
+<head>
+    <style>
+        body {
+            font-family: sans-serif;
+            background-image: url('/static/images/login.jpg');
+            margin: 0;
+            width: 100%;
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .form {
+            border: 2px solid rgb(25, 172, 12);
+            width: 50%;
+            height: auto;
+            border-radius: 20px;
+            background-color: rgba(141, 209, 156, 0.5);
+            margin-top: 2rem; /* Adjusted margin-top for better positioning */
+            box-shadow: 5px 5px 5px 5px rgba(141, 209, 156, 0.5);
+            text-align: center; /* Center align the content */
+            padding: 20px; /* Added padding for better spacing */
+        }
+
+        input[type=text], input[type=password] {
+            width: 70%; /* Adjusted input width for better visibility */
+            padding: 12px 20px;
+            margin: 8px 0;
+            border: 1px solid #ffffff;
+            box-sizing: border-box;
+            border-radius: 0.56rem;
+            box-shadow: 1px 1px 1px 1px #ffffff;
+        }
+
+        button {
+            background-color: rgb(3, 106, 9);
+            color: white;
+            padding: 0.87rem 20px;
+            border: none;
+            cursor: pointer;
+            width: 20%; /* Adjusted button width for better visibility */
+            border-radius: 5px;
+            transition: transform 0.3s ease;
+            margin-top: 10px; /* Added margin-top for better spacing */
+        }
+
+        button:hover {
+            transform: scale(1.07);
+        }
+
+        .imgcontainer {
+            text-align: center;
+            margin-top: 20px; /* Added margin-top for better spacing */
+        }
+
+        img.avatar {
+            width: 150px; /* Adjusted image width for better visibility */
+            border-radius: 50%;
+            height: auto; /* Made the height auto to maintain aspect ratio */
+        }
+
+        .container {
+            padding: 20px; /* Added padding for better spacing */
+        }
+
+        span.pass {
+            display: block;
+            padding-top: 10px; /* Adjusted padding-top for better spacing */
+        }
+
+        a {
+            color: #035f05; /* Changed link color to a subtle green */
+           
+        }
+
+        .alertmsg{
+            background-color: rgb(215, 185, 185);
+            color: red;
+            width: fit-content;
+            padding: 5px;
+            text-align: left;
+            margin-left: 120px;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="form">
+        <h2 style="color: rgb(2, 75, 5);">
+            <img src="{% static 'images/logo.png' %}" style="height: 90px; width: 9.37rem;"> </br> HR Login
+        </h2>
+        <div class="imgcontainer">
+            <!-- Profile pic -->
+            <img src="{% static 'images/profileavtar.jpg' %}" alt="Avatar" class="avatar">
+        </div>
+        <form method="POST" action="">
+            {% csrf_token %}
+            
+        <div class="container">
+            <!-- Form -->
+            <input type="text" placeholder="Enter Username" id="uname" name="email" required></br>
+            <input type="password" placeholder="Enter Password" id="pass" name="password" required></br>
+            {% if msg %}
+            <div class="alertmsg">
+            
+            {{msg}}
+            
+            </div>
+            {% endif %}
+            <button type="submit">Login</button></br>
+            </form>
+
+            <label>
+                <input type="checkbox" checked="checked" name="remember"> Remember me
+            </label>
+        </div>
+
+        <label for="pass">
+            <span class="pass">Have you forgotten your <a href="#">Username</a> or <a href="#">Password?</a></span>
+        </label>
+
+        <label>
+            <span>Do you wish to register for a <a href="{% url 'hrregister' %}">new account</a></span>
+        </label>
+    </div>
+</body>
+</html>

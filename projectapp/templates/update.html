@@ -1,4 +1,4 @@
-{% extends 'adminmain.html' %}
+{% extends 'hrmain.html' %}
 <html>
     {% block mycontent %}
 
@@ -7,8 +7,8 @@
 
         .tables {
             border-collapse: collapse;
-            width: 80%;
-            margin: 20px auto;
+            width: 75%;
+            margin-left: 310px;
             background-color: #fff;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             border: 1px solid #ddd;
@@ -24,7 +24,7 @@
         }
 
         .tables th {
-            background-color: #4CAF50;
+            background-color: rgb(3, 106, 9);
             color: white;
         }
 
@@ -38,7 +38,8 @@
 
         h2 {
             text-align: center;
-            color: #333;
+            color: rgb(3, 106, 9);
+            margin-left: 130px;
         }
 
         .filter {
@@ -64,7 +65,7 @@
 </head>
 
 <body>
-    
+    <h2> Update </h2>
     <table class="tables">
         <thead>
             <tr>
@@ -72,6 +73,7 @@
                 <th>In Time</th>
                 <th>Out Time</th>
                 <th>Status</th>
+                <th> </th>
             </tr>
         </thead>
         <tbody>
