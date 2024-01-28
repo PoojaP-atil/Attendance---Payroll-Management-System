@@ -26,7 +26,7 @@
         <div class="right">
         
            <label for="state" class="label1"> State : </label><select name="state" id="state" style="height: 40px; width: 100%;  margin: 8px 0; display: inline-block; border: 1px solid rgb(123, 161, 237); box-sizing: border-box; border-radius: 0.56rem; box-shadow: 1px 1px 1px 1px rgb(199, 217, 80);">
-                <option value="">{{empdetail.State}}</option>
+                <option value="{{empdetail.State}}">{{empdetail.State}}</option>
                 <option value="Andaman and Nicobar Islands">Andaman and Nicobar Islands</option>
                 <option value="Andhra Pradesh">Andhra Pradesh</option>
                 <option value="Arunachal Praddesh">Arunachal Pradesh</option>
@@ -67,12 +67,12 @@
             </select>  
        
             <label for="designation" class="label1">Designation : </label><select name="designation" id="designation" style="height: 40px; width: 100%;  margin: 8px 0; display: inline-block; border: 1px solid rgb(123, 161, 237); box-sizing: border-box; border-radius: 0.56rem; box-shadow: 1px 1px 1px 1px rgb(199, 217, 80);">
-                <option value="">{{empdetail.Designation}}</option>
+                <option value="{{empdetail.Designation}}">{{empdetail.Designation}}</option>
                 
             </select>
 
             <label for="department" class="label1">Department : </label><select name="department" id="department" style="height: 40px; width: 100%;  margin: 8px 0; display: inline-block; border: 1px solid rgb(123, 161, 237); box-sizing: border-box; border-radius: 0.56rem; box-shadow: 1px 1px 1px 1px rgb(199, 217, 80);">
-                <option value="">{{empdetail.Department}}</option>
+                <option value="{{empdetail.Department}}">{{empdetail.Department}}</option>
                 
             </select>
 
@@ -81,7 +81,7 @@
             <label for="email" class="label1">Email : </label> <input class="css" type="text" placeholder="Enter Email" name="email" id="email" value="{{empdetail.Email}}" required><br>
 
             <label for="photo" class="label1">Upload Photo</label>
-            <input type="file" placeholder="Browse Photo to Upload" name="photo" id="upload" style="width: 100%; color:  #035f05; height: 40px; padding: 12px 15px; margin: 8px 0; border: 1px solid rgb(123, 161, 237); box-sizing: border-box; border-radius: 0.56rem; box-shadow: 1px 1px 1px 1px rgb(199, 217, 80);"></br>
+            <input type="file" value="{{empdetail.Photo.url}}" placeholder="Browse Photo to Upload" name="photo" id="upload" style="width: 100%; color:  #035f05; height: 40px; padding: 12px 15px; margin: 8px 0; border: 1px solid rgb(123, 161, 237); box-sizing: border-box; border-radius: 0.56rem; box-shadow: 1px 1px 1px 1px rgb(199, 217, 80);"></br>
 
         </div>
         </div>

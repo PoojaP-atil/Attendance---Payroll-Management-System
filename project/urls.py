@@ -47,8 +47,10 @@ urlpatterns = [
     path('show/<slug:slug>/', views.hrshow, name="showattendance1"),
     path('hrattendancelist/',views.hrattendancelist,name='hrattendancelist'),
     path('updt/',views.updt, name="updt"),
-    path('chatgpt/',views.chatgpt,name='chatgpt'),
-]
+    path('hrheadhome/',views.hrheadhome,name='hrheadhome'),
+    path('month-calendar/<int:year>/<int:month>/', views.month_calendar, name='month_calendar'),
+    path('calculation/',views.calculation,name='calculation'),
 
+]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -15,7 +15,7 @@
             <div class="navbar-left">
                 {% if hr.Name %}
                 <img src="{% static 'images/logo.png' %}" class="navlogo">
-                <a href="{% url 'chatgpt' %}" class="pooja" style="padding-left: 20px;"><i class="fa fa-fw fa-home"></i> Dashboard</a>
+                <a href="{% url 'hrheadhome' %}" class="pooja" style="padding-left: 20px;"><i class="fa fa-fw fa-home"></i> Dashboard</a>
                 <a href="#" class="pooja" style="padding-left: 20px;">Welcome <i class="fa fa-user-circle" aria-hidden="true"></i>       {{hr.Name}}</a>
                 <form method='POST' action="" style=" margin-bottom: 20px; padding-left: 20px; margin-top: 14px;">
                     {% csrf_token %}

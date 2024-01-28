@@ -17,6 +17,7 @@ class employee(models.Model):
     PhoneNo = models.BigIntegerField()  
     Email = models.EmailField()
     Password = models.CharField(max_length=200)
+    Salary = models.FloatField(default=0)
     slug = models.SlugField(default='',null=False)
 
     class Meta:
@@ -47,6 +48,7 @@ class head(models.Model):
     PhoneNo = models.BigIntegerField()  
     Email = models.EmailField()
     Password = models.CharField(max_length=200)
+    Salary = models.FloatField(default=0)
     slug = models.SlugField(default='',null=False)
 
     class Meta:
@@ -58,3 +60,20 @@ class attendance(models.Model):
     status = models.CharField(max_length=100,default='')
     in_time = models.CharField(max_length=200,default='')
     out_time = models.CharField(max_length=200,default='')
+
+class Event(models.Model):
+    title = models.CharField(max_length=255)
+    date = models.DateField()
+
+    def __str__(self):
+        return f"{self.title} on {self.date}"
+    
+class account(models.Model):
+    employee = models.ForeignKey(employee, on_delete=models.CASCADE)
+    present = models.IntegerField()
+    absent = models.IntegerField()
+    totalworkingdays = models.IntegerField()
+    paymenttobepaid = models.FloatField()
+
+    class Meta:
+        db_table = 'account'

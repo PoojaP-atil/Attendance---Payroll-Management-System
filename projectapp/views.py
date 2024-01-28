@@ -1,10 +1,11 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth.hashers import make_password,check_password
 from django.http import HttpResponse
-from projectapp.models import employee, hr,attendance, head
+from projectapp.models import employee, hr,attendance, head,account,Event
 from django.db.models import Q
-from datetime import datetime
+from datetime import datetime, timedelta
 from django.urls import reverse
+import calendar
 
 
 
@@ -98,6 +99,9 @@ def editemphr(request,slug):
             employ.PhoneNo = request.POST.get('phone')
             employ.Email = request.POST.get('email')
             employ.Photo = request.FILES.get('photo')
+            employ.Designation = request.POST.get('designation')
+            employ.Department = request.POST.get('department')
+            employ.Head = request.POST.get('sectionhead')
             employ.save()
             return render(request,'empdetail.html',{'hr':hrobj,'empdetail':employ})
         
@@ -167,7 +171,7 @@ def hrlogin(request):
 
             if flag:
                 request.session['hr'] = request.POST.get('email')
-                return redirect("../chatgpt/")
+                return redirect("../hrheadhome/")
             else:
                 error_message = "Wrong credentials !! Oops try again :("
                 return render(request,'hrlogin.html',{'msg':error_message})
@@ -179,7 +183,7 @@ def hrlogin(request):
 
             if flag:
                 request.session['head'] = request.POST.get('email')
-                return redirect("../chatgpt/")
+                return redirect("../hrheadhome/")
             else:
                 error_message = "Wrong credentials !! Oops try again :("
                 return render(request,'hrlogin.html',{'msg':error_message})
@@ -260,12 +264,13 @@ def userregister(request):
             phoneno = request.POST.get("phone")
             email =request.POST.get("email")
             password= request.POST.get("password")
+            salary = request.POST.get('salary')
             passw = make_password(password)
             slugobj = name+'-'+designation
             head1 = 'HR'
-            empobj = head(Name=name, Photo = photo,Gender=gender,Designation=designation,Department=department, City = city,DOB = dateofbirth,Address=address,State=state,Pincode=pincode,PhoneNo=phoneno,Email=email,Password=passw,slug=slugobj)
+            empobj = head(Name=name, Salary=salary, Photo = photo,Gender=gender,Designation=designation,Department=department, City = city,DOB = dateofbirth,Address=address,State=state,Pincode=pincode,PhoneNo=phoneno,Email=email,Password=passw,slug=slugobj)
             empobj.save()
-            emp1obj = employee(Name=name, Photo = photo,Gender=gender,Designation=designation,Department=department, Head=head1, City = city,DOB = dateofbirth,Address=address,State=state,Pincode=pincode,PhoneNo=phoneno,Email=email,Password=passw,slug=slugobj)
+            emp1obj = employee(Name=name, Salary=salary, Photo = photo,Gender=gender,Designation=designation,Department=department, Head=head1, City = city,DOB = dateofbirth,Address=address,State=state,Pincode=pincode,PhoneNo=phoneno,Email=email,Password=passw,slug=slugobj)
             emp1obj.save()
         else:
             name = request.POST.get("fname")
@@ -282,9 +287,10 @@ def userregister(request):
             phoneno = request.POST.get("phone")
             email =request.POST.get("email")
             password= request.POST.get("password")
+            salary = request.POST.get('salary')
             passw = make_password(password)
             slugobj = name+'-'+designation
-            empobj = employee(Name=name, Photo = photo,Gender=gender,Designation=designation,Department=department, Head=head1, City = city,DOB = dateofbirth,Address=address,State=state,Pincode=pincode,PhoneNo=phoneno,Email=email,Password=passw,slug=slugobj)
+            empobj = employee(Name=name,Salary=salary, Photo = photo,Gender=gender,Designation=designation,Department=department, Head=head1, City = city,DOB = dateofbirth,Address=address,State=state,Pincode=pincode,PhoneNo=phoneno,Email=email,Password=passw,slug=slugobj)
             empobj.save()
 
         return HttpResponse("Customer registered Successfully")
@@ -327,7 +333,7 @@ def editemp(request,slug):
         employ.Email = request.POST.get('email')
         employ.Photo = request.FILES.get('photo')
         employ.save()
-        return render(request,'empdetail.html',{'user':empobj,'empdetail':employ})
+        return render(request,'test1.html',{'user':empobj,'empdetail':employ})
 
 #show attendance tabel to useer    
 def showattendance(request):
@@ -336,6 +342,29 @@ def showattendance(request):
     attobj = attendance.objects.filter(employee=empobj.id)
     return render(request,'showattendance.html',{'user':empobj,'attobj':attobj})
 
+#payment cal
+def calculation(request):
+    user= request.session['user']
+    empobj= employee.objects.get(Email=user)
+    attobj = attendance.objects.filter(employee=empobj.id)
+    
+    pcount = 0
+    acount = 0
+    sal = 0
+    sala = 0
+    for i in attobj:
+        if i.status == 'Present':
+            pcount = pcount + 1
+
+        elif i.status == 'Absent':
+            acount = acount + 1
+    
+    salary = empobj.Salary
+    sal = salary/(pcount + acount)
+    sala = pcount * sal
+    countobj = account(present = pcount,absent = acount,employee_id = empobj.id,totalworkingdays=(pcount + acount),paymenttobepaid=sala)
+    countobj.save()    
+    return render(request,'showattendance.html',{'user':empobj,'attobj':attobj,'salary':countobj})
 
 # attendance list at user end
 def attendancelist(request):
@@ -546,13 +575,36 @@ def updt(request):
             url= reverse('showattendance1', args=[slugf])
             return redirect(url)
     
-def chatgpt(request):
+def hrheadhome(request):
     if 'hr' in request.session:
         hrs= request.session['hr']
         hrobj= hr.objects.get(Email=hrs)
-        return render(request,'chatgpt.html',{'hr':hrobj})
+        return render(request,'hrheadhome.html',{'hr':hrobj})
     
     elif 'head' in request.session:
         head1 = request.session['head']
         headobj = head.objects.get(Email =head1)
-        return render(request,'chatgpt.html',{'head':headobj})
+        return render(request,'hrheadhome.html',{'head':headobj})
+    
+def month_calendar(request, year, month):
+    year = int(year)
+    month = int(month)
+
+    cal = calendar.HTMLCalendar()
+    month_calendar_html = cal.formatmonth(year, month)
+
+    # Calculate the next and previous months
+    current_date = datetime(year, month, 1)
+    next_month = current_date + timedelta(days=32)
+    prev_month = current_date - timedelta(days=1)
+
+    print("Current Year:", year)
+    print("Current Month:", month)
+
+    return render(request, 'calendar.html', {
+        'month_calendar': month_calendar_html,
+        'next_month': next_month.strftime('%Y-%m'),
+        'prev_month': prev_month.strftime('%Y-%m'),
+        'current_year': year,
+        'current_month': month,
+    })

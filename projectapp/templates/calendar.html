@@ -1,0 +1,53 @@
+<!-- myapp/templates/myapp/calendar.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Month Calendar</title>
+
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: rgb(224, 243, 215);
+}
+
+        h2 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 30px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: rgb(3, 106, 9);
+            font-weight: bold;
+            color: #fff;
+        }
+
+        td {
+            background-color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <h2>{{ month_calendar.0|date:"F Y" }}</h2>
+    {{ month_calendar|safe }}
+    <a href="{% url 'month_calendar' current_year current_month %}">Current Month</a>
+    <a href="{% url 'month_calendar' prev_month.year prev_month.month %}">Previous Month</a>
+    <a href="{% url 'month_calendar' next_month.year next_month.month %}">Next Month</a>
+</body>
+</html>
