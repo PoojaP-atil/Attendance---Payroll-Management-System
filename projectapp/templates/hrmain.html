@@ -237,11 +237,18 @@ footer {
     </div>
     <div class="sidebar-menu">
         <ul>
+            {% if hr %}
             <li><a href="{% url 'userregister' %}">Add New Employee</a></li>
             <li><a href="{% url 'hrhome' %}">Employee List</a></li>
             <li><a href="#payment">Payment</a></li>
             <li><a href="#settings">Settings</a></li>
             <li><a href="{% url 'hrlogin' %}">Logout</a></li>
+            {% elif head %}
+            <li><a href="{% url 'hrhome' %}">Employee List</a></li>
+            <li><a href="#payment">Payment</a></li>
+            <li><a href="#settings">Settings</a></li>
+            <li><a href="{% url 'hrlogin' %}">Logout</a></li>
+            {% endif %}
         </ul>
     </div>
 </aside>
