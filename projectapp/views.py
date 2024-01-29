@@ -335,12 +335,6 @@ def editemp(request,slug):
         employ.save()
         return render(request,'test1.html',{'user':empobj,'empdetail':employ})
 
-#show attendance tabel to useer    
-def showattendance(request):
-    user= request.session['user']
-    empobj= employee.objects.get(Email=user)
-    attobj = attendance.objects.filter(employee=empobj.id)
-    return render(request,'showattendance.html',{'user':empobj,'attobj':attobj})
 
 #payment cal
 def calculation(request):
@@ -364,7 +358,15 @@ def calculation(request):
     sala = pcount * sal
     countobj = account(present = pcount,absent = acount,employee_id = empobj.id,totalworkingdays=(pcount + acount),paymenttobepaid=sala)
     countobj.save()    
-    return render(request,'showattendance.html',{'user':empobj,'attobj':attobj,'salary':countobj})
+    return empobj,attobj,countobj
+
+#show attendance tabel to useer    
+def showattendance(request):
+    user= request.session['user']
+    empobj= employee.objects.get(Email=user)
+    attobj = attendance.objects.filter(employee=empobj.id)
+    empobj, attobj, countobj = calculation(request)
+    return render(request,'showattendance.html',{'user':empobj,'attobj':attobj,'salary': countobj})
 
 # attendance list at user end
 def attendancelist(request):
@@ -382,7 +384,7 @@ def attendancelist(request):
         return render(request,'showattendance.html',{'user':empobj,'attobj':attobj})
 
 #attendance list at hr end   
-def hrattendancelist(request):
+"""def hrattendancelist(request):
     if request.method== "POST":
         hrs= request.session['hr']
         empobj= hr.objects.get(Email=hrs)
@@ -396,7 +398,7 @@ def hrattendancelist(request):
         else:
             attobj = attendance.objects.filter(employee_id=obj)
 
-        return render(request,'showattendancehr.html',{'hr':empobj,'attobj':attobj})
+        return render(request,'showattendancehr.html',{'hr':empobj,'attobj':attobj})"""
 
 # attendance marking from user end
 def attendanceup(request,slug):
@@ -421,7 +423,7 @@ def attendanceup(request,slug):
         attobj.save()
         return redirect('../../showattendance/')
         
-#attendance update form at hr end   
+#attendance update form at hr and head end   
 def attendanceuphr(request,slug):
     if 'hr' in request.session:
         if request.method == 'GET':
@@ -470,6 +472,28 @@ def attendanceuphr(request,slug):
             return redirect(url)
 
 
+# calculations for hr end
+def calculation1(request, emp, atobj):
+    pcount = 0
+    acount = 0
+    sal = 0
+    sala = 0
+
+    for i in atobj:
+        if i.status == 'Present':
+            pcount += 1
+        elif i.status == 'Absent':
+            acount += 1
+    
+    salary = emp.Salary
+    sal = salary / (pcount + acount)
+    sala = pcount * sal
+
+    countobj = account(present=pcount, absent=acount, employee_id=emp.id, totalworkingdays=(pcount + acount), paymenttobepaid=sala)
+    countobj.save()    
+
+    return emp, atobj, countobj
+
 
 def hrshow(request, slug):
     if 'hr' in request.session:
@@ -478,7 +502,9 @@ def hrshow(request, slug):
             hrobj= hr.objects.get(Email=hrs)
             emp= employee.objects.get(slug= slug)
             atobj= attendance.objects.filter(employee_id=emp.id)
-            return render(request, 'showattendancehr.html',{'hr':hrobj,'empobj':emp,'attobj':atobj})
+            emp, atobj, countobj = calculation1(request,emp,atobj)
+
+            return render(request, 'showattendancehr.html', {'hr': hrobj, 'attobj': atobj, 'salary': countobj})
         elif request.method== "POST":
             hrs= request.session['hr']
             empobj= hr.objects.get(Email=hrs)
