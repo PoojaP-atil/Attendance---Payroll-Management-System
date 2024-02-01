@@ -33,6 +33,16 @@ class hr(models.Model):
     class Meta:
         db_table = 'hr'
 
+class accountant(models.Model):
+    Name = models.CharField(max_length=200)
+    Designation = models.CharField(max_length=200)
+    Department = models.CharField(max_length=200)
+    Email = models.EmailField()
+    Password = models.CharField(max_length=200)
+
+    class Meta:
+        db_table = 'accountant'
+
 class head(models.Model):
     gender = (('Male','Male'),('Female','Female')) 
     Photo = models.ImageField(upload_to='media')

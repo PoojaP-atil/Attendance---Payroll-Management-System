@@ -5,4 +5,4 @@ from . import models
 class empadmin(admin.ModelAdmin):
     prepopulated_fields = {"slug" : ("Name","Designation")}
 
-admin.site.register(models.employee,empadmin)
+admin.site.register(models.employee,empadmin) 

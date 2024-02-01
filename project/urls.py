@@ -48,7 +48,7 @@ urlpatterns = [
     #path('hrattendancelist/',views.hrattendancelist,name='hrattendancelist'),
     path('updt/',views.updt, name="updt"),
     path('hrheadhome/',views.hrheadhome,name='hrheadhome'),
-    path('month-calendar/<int:year>/<int:month>/', views.month_calendar, name='month_calendar'),
+    path('calendar/<int:year>/<int:month>/', views.month_calendar, name='month_calendar'),
     path('calculation/',views.calculation,name='calculation'),
 
 ]

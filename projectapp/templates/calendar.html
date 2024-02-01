@@ -1,53 +1,77 @@
-<!-- myapp/templates/myapp/calendar.html -->
-<!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Month Calendar</title>
-
     <style>
         body {
             font-family: 'Arial', sans-serif;
             margin: 20px;
-            padding: 20px;
-            background-color: rgb(224, 243, 215);
-}
+            background-color: #f4f4f4;
+        }
 
         h2 {
-            color: #333;
             text-align: center;
             margin-bottom: 20px;
+            color: #333;
         }
 
-        table {
-            width: 100%;
+        .calendar {
+            width: 30%;
+            margin: 0 auto;
             border-collapse: collapse;
-            margin-top: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
-        th, td {
+        .calendar th, .calendar td {
             padding: 30px;
             text-align: center;
             border: 1px solid #ddd;
         }
 
-        th {
-            background-color: rgb(3, 106, 9);
-            font-weight: bold;
+        .calendar th {
+            background-color: #035f05;
             color: #fff;
+            font-weight: bold;
         }
 
-        td {
-            background-color: #fff;
+        .month-navigation {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .month-link {
+            margin: 0 15px;
+            text-decoration: none;
+            color: #035f05;
+            font-weight: bold;
+            transition: color 0.3s ease-in-out;
+        }
+
+        .month-link:hover {
+            color: #035f05;
         }
     </style>
 </head>
 <body>
-    <h2>{{ month_calendar.0|date:"F Y" }}</h2>
-    {{ month_calendar|safe }}
-    <a href="{% url 'month_calendar' current_year current_month %}">Current Month</a>
-    <a href="{% url 'month_calendar' prev_month.year prev_month.month %}">Previous Month</a>
-    <a href="{% url 'month_calendar' next_month.year next_month.month %}">Next Month</a>
+
+    <h2>Month Calendar - {{ current_year }}/{{ current_month }}</h2>
+
+    <div class="month-navigation">
+        <a class="month-link" href="../calendar/{{prev_month.year}}/{{prev_month.month}} ">&lt; Previous Month</a>
+        <a class="month-link" href="../calendar/{{next_month.year}}/{{next_month.month}}">Next Month &gt;</a>
+    </div>
+
+    <table class="calendar">
+      
+            
+       
+        <tbody>
+            <td>
+                
+            {{ month_calendar|safe }}
+        </td>
+        </tbody>
+
+    </table>
+
 </body>
 </html>

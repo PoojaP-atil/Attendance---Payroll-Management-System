@@ -1,9 +1,9 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth.hashers import make_password,check_password
 from django.http import HttpResponse
-from projectapp.models import employee, hr,attendance, head,account,Event
+from projectapp.models import employee, hr,attendance, head,account,Event,accountant
 from django.db.models import Q
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, time
 from django.urls import reverse
 import calendar
 
@@ -69,6 +69,8 @@ def hrhome(request):
         hrs= request.session.get('hr')
         hrobj= hr.objects.get(Email=hrs)
         return render(request, 'hrindex.html', {'hr': hrobj,'empdetail': hrobj})
+    
+    
     
 #delete user profile from hr
 def deleteprofile(request,slug):
@@ -187,6 +189,19 @@ def hrlogin(request):
             else:
                 error_message = "Wrong credentials !! Oops try again :("
                 return render(request,'hrlogin.html',{'msg':error_message})
+            
+        elif accountant.objects.get(Email = hrs):
+            accobj = accountant.objects.get(Email=request.POST.get("email"))
+            passfe = request.POST.get("password")
+            flag = check_password(passfe,accobj.Password)
+
+            if flag:
+                request.session['acc'] = request.POST.get('email')
+                return redirect("../hrheadhome/")
+            else:
+                error_message = "Wrong credentials !! Oops try again :("
+                return render(request,'hrlogin.html',{'msg':error_message})
+
 
         else:
             error_message = "No User found"
@@ -272,6 +287,16 @@ def userregister(request):
             empobj.save()
             emp1obj = employee(Name=name, Salary=salary, Photo = photo,Gender=gender,Designation=designation,Department=department, Head=head1, City = city,DOB = dateofbirth,Address=address,State=state,Pincode=pincode,PhoneNo=phoneno,Email=email,Password=passw,slug=slugobj)
             emp1obj.save()
+
+        elif request.POST.get('designation') == 'Accountant':
+            name = request.POST.get('fname')
+            designation = request.POST.get("designation")
+            department = request.POST.get("department")
+            email =request.POST.get("email")
+            password= request.POST.get("password")
+            accobj = accountant(Name=name,Designation=designation,Department=department,Email = email,Password=password)
+            accobj.save()
+
         else:
             name = request.POST.get("fname")
             photo =request.FILES.get("photo")
@@ -473,28 +498,56 @@ def attendanceuphr(request,slug):
 
 
 # calculations for hr end
-def calculation1(request, emp, atobj):
-    pcount = 0
-    acount = 0
-    sal = 0
-    sala = 0
+def calculate_deduction(in_time, out_time, sal_per_day):
+    if in_time > '09:15' or out_time < '18:00':
+        return sal_per_day / 2
+    return 0
 
+def calculation1(request, emp, atobj):
+    present_count = 0
+    absent_count = 0
+    
     for i in atobj:
         if i.status == 'Present':
-            pcount += 1
+            present_count += 1
+
         elif i.status == 'Absent':
-            acount += 1
-    
-    salary = emp.Salary
-    sal = salary / (pcount + acount)
-    sala = pcount * sal
+            absent_count += 1
 
-    countobj = account(present=pcount, absent=acount, employee_id=emp.id, totalworkingdays=(pcount + acount), paymenttobepaid=sala)
-    countobj.save()    
+    sal_per_day = emp.Salary / (absent_count + present_count)
+    overall_salary = sal_per_day *(absent_count + present_count)
+    print(overall_salary)
+    print(f"{sal_per_day} sal per day")
 
+    for i in atobj:
+        print(i)
+
+        if i.status == 'Present':
+            in_time = i.in_time
+            out_time = i.out_time
+            deduction = calculate_deduction(in_time, out_time, sal_per_day)
+            print(f"{deduction} deducted sal when late")
+            overall_salary = overall_salary - deduction
+            print(f"{overall_salary} present sal")
+
+        elif i.status == 'Absent':
+            overall_salary = overall_salary - sal_per_day
+            print(f"{overall_salary} absent sal")
+
+    a= overall_salary
+    print(f"{a} present absent total sal")
+
+    countobj = account(
+        present=present_count,
+        absent=absent_count,
+        employee_id=emp.id,
+        totalworkingdays=present_count + absent_count,
+        paymenttobepaid=a
+    )
+    countobj.save()
     return emp, atobj, countobj
 
-
+#hr and head can view attendance list
 def hrshow(request, slug):
     if 'hr' in request.session:
         if request.method == 'GET':
@@ -504,21 +557,23 @@ def hrshow(request, slug):
             atobj= attendance.objects.filter(employee_id=emp.id)
             emp, atobj, countobj = calculation1(request,emp,atobj)
 
-            return render(request, 'showattendancehr.html', {'hr': hrobj, 'attobj': atobj, 'salary': countobj})
+            return render(request, 'showattendancehr.html', {'hr': hrobj, 'attobj': atobj, 'salary': countobj,'empobj':emp})
         elif request.method== "POST":
             hrs= request.session['hr']
             empobj= hr.objects.get(Email=hrs)
+            emp= employee.objects.get(slug= slug)
             obj = request.POST['eid']
             print(obj)
-            attobj = attendance.objects.filter(employee_id= obj)
+            atobj = attendance.objects.filter(employee_id= obj)
             selected_month = request.POST.get('monthFilter')
 
             if selected_month:
-                attobj = attendance.objects.filter(date__month=selected_month,employee_id=obj)
+                atobj = attendance.objects.filter(date__month=selected_month,employee_id=obj)
             else:
-                attobj = attendance.objects.filter(employee_id=obj)
-
-            return render(request,'showattendancehr.html',{'hr':empobj,'attobj':attobj})
+                atobj = attendance.objects.filter(employee_id=obj)
+            emp, atobj, countobj = calculation1(request,emp,atobj)
+            return render(request,'showattendancehr.html',{'hr':empobj,'attobj':atobj,'empobj':emp,'salary':countobj})
+        
     elif 'head' in request.session:    
         if request.method == 'GET':
             head1 = request.session.get('head')
@@ -541,7 +596,30 @@ def hrshow(request, slug):
 
             return render(request,'showattendancehr.html',{'head':empobj,'attobj':attobj})
 
+    elif 'acc' in request.session:
+        if request.method == 'GET':
+            acc1= request.session.get('acc')
+            accobj= accountant.objects.get(Email= acc1)
+            emp= employee.objects.get(slug= slug)
+            atobj= attendance.objects.filter(employee_id=emp.id)
+            emp, atobj, countobj = calculation1(request,emp,atobj)
 
+            return render(request, 'showattendancehr.html', {'acc': accobj, 'attobj': atobj, 'salary': countobj,'empobj':emp})
+        elif request.method== "POST":
+            acc1= request.session['acc']
+            empobj= accountant.objects.get(Email=acc1)
+            emp= employee.objects.get(slug= slug)
+            obj = request.POST['eid']
+            print(obj)
+            atobj = attendance.objects.filter(employee_id= obj)
+            selected_month = request.POST.get('monthFilter')
+
+            if selected_month:
+                atobj = attendance.objects.filter(date__month=selected_month,employee_id=obj)
+            else:
+                atobj = attendance.objects.filter(employee_id=obj)
+            emp, atobj, countobj = calculation1(request,emp,atobj)
+            return render(request,'showattendancehr.html',{'acc':empobj,'attobj':atobj,'empobj':emp,'salary':countobj})
 
 def update(request, id):
     if 'hr' in request.session:
@@ -626,6 +704,8 @@ def month_calendar(request, year, month):
 
     print("Current Year:", year)
     print("Current Month:", month)
+    print(f"Previous Month URL: {reverse('month_calendar', args=[prev_month.year, prev_month.month])}")
+    print(f"Next Month URL: {reverse('month_calendar', args=[next_month.year, next_month.month])}")
 
     return render(request, 'calendar.html', {
         'month_calendar': month_calendar_html,

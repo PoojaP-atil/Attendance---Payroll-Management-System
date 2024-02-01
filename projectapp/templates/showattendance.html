@@ -119,68 +119,6 @@
     </table>
 </form>
 
-<button onclick="calculateSalary()" id="calculate" >calculate Salary</button>
-
-<div class="tablecontainer" id="tablecontainer">
-    <!-- The table will be dynamically added here using JavaScript -->
-</div>
-
-<script>
-    function renderTable() {
-        // Your rendering logic goes here
-        // For demonstration purposes, let's append a simple table to #tablecontainer
-        var tableContainer = document.getElementById("tablecontainer");
-
-        // Create table element
-        var table = document.createElement("table");
-        table.className = "tables"; // Add the 'tables' class
-
-        // Create table header
-        var thead = document.createElement("thead");
-        var tr = document.createElement("tr");
-
-        // Add table header cells
-        var headers = ["Number of Days Present", "Number of Days Absent", "Total Working Days", "Total Salary to be Paid"];
-        headers.forEach(function (headerText) {
-            var th = document.createElement("th");
-            th.textContent = headerText;
-            tr.appendChild(th);
-        });
-
-        // Append the header row to the thead
-        thead.appendChild(tr);
-
-        // Create table body
-        var tbody = document.createElement("tbody");
-
-        // Create a sample row for demonstration
-        var row = document.createElement("tr");
-        var sampleData = ["{{salary.present}}", "{{salary.absent}}", "{{salary.totalworkingdays}}", "{{salary.paymenttobepaid}}"];
-        sampleData.forEach(function (data) {
-            var td = document.createElement("td");
-            td.textContent = data;
-            row.appendChild(td);
-        });
-
-        // Append the sample row to the tbody
-        tbody.appendChild(row);
-
-        // Append the thead and tbody to the table
-        table.appendChild(thead);
-        table.appendChild(tbody);
-
-        // Append the table to the container
-        tableContainer.appendChild(table);
-    }
-
-    function calculateSalary() {
-        // Hide the button after clicking
-        document.getElementById("calculate").style.visibility = "hidden";
-
-        // Render the content in #tablecontainer
-        renderTable();
-    }
-</script>
 
 </body>
 
