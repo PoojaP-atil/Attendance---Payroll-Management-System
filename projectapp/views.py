@@ -24,6 +24,13 @@ def EmpListView(request):
         employ = employee.objects.filter(Head = empobj.Name)
         print(head1)
         return render(request,'home.html',{'head':empobj,'employ':employ})
+    
+    elif 'acc' in request.session:
+        acc = request.session['acc']
+        empobj = accountant.objects.get(Email = acc)
+        employ = employee.objects.all()
+        print(acc)
+        return render(request,'acchome.html',{'head':empobj,'employ':employ})
 
 def EmpDetailView(request,slug):
     if 'hr' in request.session:
@@ -37,6 +44,14 @@ def EmpDetailView(request,slug):
         empobj = head.objects.get(Email = head1)
         employ = employee.objects.get(slug = slug)
         return render(request,'empdetail.html',{'head':empobj,'empdetail':employ})
+
+def accempview(request,slug):    
+    if 'acc' in request.session:
+        acc = request.session['acc']
+        empobj = accountant.objects.get(Email = acc)
+        employ = employee.objects.get(slug = slug)
+        attobj = attendance.objects.filter(employee=empobj.id)
+        return render(request,'accempdetail.html',{'head':empobj,'empdetail':employ,'attobj':attobj})
 
 def Editemp(request,slug):
     if request.method =='GET':
@@ -189,8 +204,18 @@ def hrlogin(request):
             else:
                 error_message = "Wrong credentials !! Oops try again :("
                 return render(request,'hrlogin.html',{'msg':error_message})
-            
-        elif accountant.objects.get(Email = hrs):
+        else:
+            error_message = "No User found"
+            return render(request,'hrlogin.html',{'msg':error_message})
+
+#accountant login
+def acclogin(request):
+    if request.method=="GET":
+        return render(request,"acclogin.html")
+    elif request.method=="POST":
+        acc = request.POST['email']
+        accobj = accountant.objects.filter(Email = acc)
+        if accobj:
             accobj = accountant.objects.get(Email=request.POST.get("email"))
             passfe = request.POST.get("password")
             flag = check_password(passfe,accobj.Password)
@@ -200,14 +225,11 @@ def hrlogin(request):
                 return redirect("../hrheadhome/")
             else:
                 error_message = "Wrong credentials !! Oops try again :("
-                return render(request,'hrlogin.html',{'msg':error_message})
-
-
+                return render(request,'acclogin.html',{'msg':error_message})
+            
         else:
             error_message = "No User found"
-            return render(request,'hrlogin.html',{'msg':error_message})
-
-
+            return render(request,'acclogin.html',{'msg':error_message})
 
 #hr logout       
 def hrlogout(request):
@@ -294,7 +316,8 @@ def userregister(request):
             department = request.POST.get("department")
             email =request.POST.get("email")
             password= request.POST.get("password")
-            accobj = accountant(Name=name,Designation=designation,Department=department,Email = email,Password=password)
+            passw = make_password(password)
+            accobj = accountant(Name=name,Designation=designation,Department=department,Email = email,Password=passw)
             accobj.save()
 
         else:
@@ -596,30 +619,32 @@ def hrshow(request, slug):
 
             return render(request,'showattendancehr.html',{'head':empobj,'attobj':attobj})
 
-    elif 'acc' in request.session:
+#accountant show
+def accshow(request,slug):
+    if 'acc' in request.session:
         if request.method == 'GET':
-            acc1= request.session.get('acc')
-            accobj= accountant.objects.get(Email= acc1)
+            acc= request.session.get('acc')
+            accobj= accountant.objects.get(Email= acc)
             emp= employee.objects.get(slug= slug)
-            atobj= attendance.objects.filter(employee_id=emp.id)
-            emp, atobj, countobj = calculation1(request,emp,atobj)
+            attobj= attendance.objects.filter(employee_id=emp.id)
+            emp, attobj, countobj = calculation1(request,emp,attobj)
 
-            return render(request, 'showattendancehr.html', {'acc': accobj, 'attobj': atobj, 'salary': countobj,'empobj':emp})
+            return render(request, 'accempdetail.html', {'acc': accobj, 'attobj': attobj, 'salary': countobj,'empobj':emp})
         elif request.method== "POST":
-            acc1= request.session['acc']
-            empobj= accountant.objects.get(Email=acc1)
+            acc= request.session['acc']
+            empobj= accountant.objects.get(Email=acc)
             emp= employee.objects.get(slug= slug)
             obj = request.POST['eid']
             print(obj)
-            atobj = attendance.objects.filter(employee_id= obj)
+            attobj = attendance.objects.filter(employee_id= obj)
             selected_month = request.POST.get('monthFilter')
 
             if selected_month:
-                atobj = attendance.objects.filter(date__month=selected_month,employee_id=obj)
+                attobj = attendance.objects.filter(date__month=selected_month,employee_id=obj)
             else:
-                atobj = attendance.objects.filter(employee_id=obj)
-            emp, atobj, countobj = calculation1(request,emp,atobj)
-            return render(request,'showattendancehr.html',{'acc':empobj,'attobj':atobj,'empobj':emp,'salary':countobj})
+                attobj = attendance.objects.filter(employee_id=obj)
+            emp, attobj, countobj = calculation1(request,emp,attobj)
+            return render(request,'accempdetail.html',{'acc':empobj,'attobj':attobj,'empobj':emp,'salary':countobj})
 
 def update(request, id):
     if 'hr' in request.session:
@@ -689,6 +714,11 @@ def hrheadhome(request):
         head1 = request.session['head']
         headobj = head.objects.get(Email =head1)
         return render(request,'hrheadhome.html',{'head':headobj})
+    
+    elif 'acc' in request.session:
+        acc = request.session['acc']
+        accobj = accountant.objects.get(Email =acc)
+        return render(request,'hrheadhome.html',{'head':accobj})
     
 def month_calendar(request, year, month):
     year = int(year)
