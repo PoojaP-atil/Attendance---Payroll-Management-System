@@ -33,8 +33,8 @@
 
         .profile-card img {
             width: 200px;
-            height: 150px;
-            border-radius: 50%;
+            height: 250px;
+            
             margin-bottom: 15px;
         }
 
@@ -61,42 +61,52 @@
             color: #555;
         }
 
-        .attendance-btn {
-            display: block;
-            width: 90%;
-            padding: 10px;
-            text-decoration: none;
-            font-size: 16px;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease-in-out;
-        }
-
-        .edit-btn{
-            display: block;
-            width: 90%;
-            padding: 10px;
-            text-decoration: none;
-            font-size: 16px;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease-in-out;
-        }
-
-        .attendance-btn {
-            background-color: #27ae60;
+        .button-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
             margin-top: 10px;
+        }
+
+        .edit-btn {
+            flex: 1;
+            background-color: #27ae60;
+            padding: 10px;
+            text-align: center; 
+            text-decoration: none;
+            font-size: 16px;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        .attendance-btn{
+            flex: 1;
+            background-color: #27ae60;
+            padding: 10px;
+            text-align: center; 
+            text-decoration: none;
+            font-size: 16px;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease-in-out;
         }
 
         .attendance-btn:hover {
             background-color: #2980b9;
         }
 
+        .edit-btn:hover {
+            background-color: #2980b9;
+        }
       
+        .h4{
+            color: #27ae60;
+        }
     </style>
 </head>
 <body>
@@ -108,17 +118,27 @@
         <div class="profile-card">
             <img src="{{ empdetail.Photo.url }}" alt="Profile Image">
             <h2>{{ empdetail.Name }}</h2>
-
-            <a href="../../editemp/{{ empdetail.slug }}/" class="edit-btn" style="background-color: #27ae60;">
+<div class="button-container">
+            <a href="../../editemp/{{ empdetail.slug }}/" class="edit-btn" >
                 Edit Profile
             </a>
 
+            <a href="{% url 'month_calendar' year=2024 month=2 %}" class="edit-btn">
+                Calendar
+             </a>
+
+            <a href="{% url 'submit_leave_request' %}" class="attendance-btn" >
+                Leave Application
+             </a>
+             
             <a href="{% url 'update_attendance' empdetail.slug %}" class="attendance-btn">
                Update Attendance
             </a>
+            </div>
         </div>
 
         <div class="profile-card">
+            <h2 class="h4"> Personal Details </h2>
             <div class="detail-card">
                 <div class="detail-label">DOB:</div>
                 <div class="detail-value">{{ empdetail.DOB }}</div>
@@ -138,6 +158,8 @@
         </div>
 
         <div class="profile-card">
+            <h2 class="h4"> Address </h2>
+
             <div class="detail-card">
                 <div class="detail-label">Address:</div>
                 <div class="detail-value">{{ empdetail.Address }}</div>
@@ -157,6 +179,8 @@
         </div>
 
         <div class="profile-card">
+            <h2 class="h4"> Company Details </h2>
+
             <div class="detail-card">
                 <div class="detail-label">Designation:</div>
                 <div class="detail-value">{{ empdetail.Designation }}</div>

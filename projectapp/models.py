@@ -87,3 +87,12 @@ class account(models.Model):
 
     class Meta:
         db_table = 'account'
+
+class LeaveRequest(models.Model):
+    employee = models.ForeignKey(employee, on_delete=models.CASCADE)
+    leave_type = models.CharField(max_length=2)
+    reason = models.CharField(max_length=500)
+    datefrom = models.DateField(max_length=200)
+    datetill = models.DateField(max_length=200)
+    is_approved = models.CharField(max_length=200,default='Unapproved')
+

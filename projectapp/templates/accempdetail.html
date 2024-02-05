@@ -111,6 +111,7 @@
                 <th>In Time</th>
                 <th>Out Time</th>
                 <th>Status</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -124,7 +125,6 @@
                 <td>{{i.status}}</td>
             </tr>
             {% endfor %}
-
              
         </tbody>
     </table>
@@ -133,10 +133,12 @@
 
 <button onclick="calculateSalary()" id="calculate" class="button1">Calculate Salary</button>
 
+
 <div class="tablecontainer" id="tablecontainer">
+<button onclick="initPayPalButton()" name="paypapl" id="paypapl" class="button1">Do payment</button>
+<div class="sale my-3"> <div id="paypal-button-container"></div> </div>
     <!-- The table will be dynamically added here using JavaScript -->
 </div>
-
 <script>
     function renderTable() {
         // Your rendering logic goes here
@@ -193,6 +195,98 @@
         renderTable();
     }
 </script>
+
+<!-- Include the PayPal JavaScript SDK -->
+<script src="https://www.paypal.com/sdk/js?client-id=test&currency=USD"></script>
+    
+<script>
+    var amount= {{salary.paymenttobepaid}}
+ function initPayPalButton() {
+    document.getElementById("paypapl").style.visibility ="hidden";
+paypal.Buttons({
+style: {
+
+shape: 'rect',
+
+color: 'gold',
+
+layout: 'vertical',
+
+label: 'paypal',
+
+
+
+},
+
+
+
+createOrder: function(data, actions) {
+
+return actions.order.create({
+
+  purchase_units: [{"amount":{"currency_code":"USD","value":amount}}]
+
+});
+
+},
+
+
+
+onApprove: function(data, actions) {
+
+return actions.order.capture().then(function(orderData) {
+
+ console.log(orderData)
+
+  // Full available details
+
+  console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
+              var data = orderData['id']
+    //           var f = document.createElement('form');
+    // f.action='http://localhost:8000/orderplaced/';
+    // f.method='GET';
+    // f.target='_blank';
+
+    // var i=document.createElement('input');
+    // i.type='hidden';
+    // i.name='fragment';
+    // i.value=orderData['id'];
+    // f.appendChild(i);
+
+    // document.body.appendChild(f);
+
+    // f.submit();
+    odata = {{orderobj.ordernumber}};
+ window.location.replace("http://127.0.0.1:8000/orderplaced/"+data+"/"+odata+"/");
+  
+
+
+
+ 
+
+
+ 
+
+});
+
+},
+
+
+
+onError: function(err) {
+
+console.log(err);
+
+}
+
+}).render('#paypal-button-container');
+
+}
+
+
+
+</script>
+
 
 </body>
 

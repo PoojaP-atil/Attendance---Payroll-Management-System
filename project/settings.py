@@ -27,6 +27,11 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'pooja.shekhar21@gmail.com'
+EMAIL_HOST_PASSWORD = 'xzri giqj quyi csvd'
+EMAIL_PORT = 587
 
 # Application definition
 

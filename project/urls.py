@@ -53,7 +53,12 @@ urlpatterns = [
     path('updt/',views.updt, name="updt"),
     path('hrheadhome/',views.hrheadhome,name='hrheadhome'),
     path('calendar/<int:year>/<int:month>/', views.month_calendar, name='month_calendar'),
+    path('path/to/prev/month/<int:year>/<int:month>/', views.month_calendar, name='month_calendar'),
+    path('path/to/next/month/<int:year>/<int:month>/', views.month_calendar, name='month_calendar'),
     path('calculation/',views.calculation,name='calculation'),
+    path('submit_leave_request/', views.submit_leave_request, name='submit_leave_request'),
+    path('calculate_payment/', views.calculation1, name='calculate_payment'),
+
 
 ]
 if settings.DEBUG:
