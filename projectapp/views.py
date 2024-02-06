@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth.hashers import make_password,check_password
 from django.http import HttpResponse, HttpResponseBadRequest
-from projectapp.models import employee, hr,attendance, head,account,Event,accountant,LeaveRequest
+from projectapp.models import employee, hr,attendance, head,account,Event,accountant,LeaveRequest,payment
 from django.db.models import Q
 from datetime import datetime, timedelta, date
 from django.urls import reverse
@@ -340,7 +340,7 @@ def userregister(request):
             slugobj = name+'-'+designation
             empobj = employee(Name=name,Salary=salary, Photo = photo,Gender=gender,Designation=designation,Department=department, Head=head1, City = city,DOB = dateofbirth,Address=address,State=state,Pincode=pincode,PhoneNo=phoneno,Email=email,Password=passw,slug=slugobj)
             empobj.save()
-            send_mail = EmailMessage('Login Credentials','Dear User {{Name}},\n\nHere are your login credentials:\n\nUsername: {{Email}}\nPassword: {{Password}}.\n\nPlease keep this information confidential and do not share it with others. If you have any questions or need assistance, feel free to contact us.\n\nBest regards,\nAttandance and Payroll Management System',to=['pooja.shekhar21@gmail.com'] )
+            send_mail = EmailMessage('Login Credentials',f'Dear User {name},\n\nHere are your login credentials:\n\nUsername: {email}\nPassword: {password}.\n\nPlease keep this information confidential and do not share it with others. If you have any questions or need assistance, feel free to contact us.\n\nBest regards,\nAttandance and Payroll Management System',to=['pooja.shekhar21@gmail.com'] )
             send_mail.send()
 
         return HttpResponse("Customer registered Successfully")
@@ -658,6 +658,7 @@ def hrshow(request, slug):
 
             return render(request,'showattendancehr.html',{'head':empobj,'attobj':attobj})
 
+import math
 #accountant show
 def accshow(request,slug):
     if 'acc' in request.session:
@@ -667,8 +668,10 @@ def accshow(request,slug):
             emp= employee.objects.get(slug= slug)
             attobj= attendance.objects.filter(employee_id=emp.id)
             emp, attobj, countobj = calculation1(request,emp,attobj)
+            payment1 = math.trunc(countobj.paymenttobepaid)
+            print(f"{payment1} payment1")
 
-            return render(request, 'accempdetail.html', {'acc': accobj, 'attobj': attobj, 'salary': countobj,'empobj':emp})
+            return render(request, 'accempdetail.html', {'acc': accobj, 'attobj': attobj, 'salary': countobj,'empobj':emp,'payment':payment1})
         elif request.method== "POST":
             acc= request.session['acc']
             empobj= accountant.objects.get(Email=acc)
@@ -683,7 +686,9 @@ def accshow(request,slug):
             else:
                 attobj = attendance.objects.filter(employee_id=obj)
             emp, attobj, countobj = calculation1(request,emp,attobj)
-            return render(request,'accempdetail.html',{'acc':empobj,'attobj':attobj,'empobj':emp,'salary':countobj})
+            payment1 = math.trunc(countobj.paymenttobepaid)
+            print(f"{payment1} payment1")
+            return render(request,'accempdetail.html',{'acc':empobj,'attobj':attobj,'empobj':emp,'salary':countobj,'payment':payment1})
 
 def update(request, id):
     if 'hr' in request.session:
@@ -781,46 +786,6 @@ def month_calendar(request, year, month):
             return HttpResponseBadRequest("Invalid month")
 
         holidays_set = get_holidays(year)
-
-        current_date = datetime(year, month, 1)
-        cal = calendar.monthcalendar(year, month)
-        month_calendar_html = "<table>"
-        month_calendar_html += "<tr><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th><th>Sun</th></tr>"
-
-        for week in cal:
-            month_calendar_html += "<tr>"
-            for day in week:
-                if day == 0:
-                    month_calendar_html += "<td></td>"
-                elif day == current_date.day and month == current_date.month and year == current_date.year:
-                    month_calendar_html += f"<td class='today'>{day}"
-                    if date(year, month, day) in holidays_set:
-                        holiday_name = holidays_set.get(date(year, month, day), None)
-                        month_calendar_html += f"<br><span class='holiday-name'>{holiday_name}</span>"
-                    month_calendar_html += "</td>"
-                else:
-                    is_holiday = date(year, month, day) in holidays_set
-                    holiday_name = holidays_set.get(date(year, month, day), None)
-                    day_class = 'holiday' if is_holiday else ''
-                    day_class += ' sunday' if datetime(year, month, day).weekday() == 6 else ''  # Add 'sunday' class for Sundays
-                    month_calendar_html += f"<td class='{day_class}'>{day}"
-                    if holiday_name:
-                        month_calendar_html += f"<br><span class='holiday-name'>{holiday_name}</span>"
-                    month_calendar_html += "</td>"
-            month_calendar_html += "</tr>"
-
-        month_calendar_html += "</table>"
-
-        # Calculate the next and previous months
-        next_month = current_date.replace(day=current_date.day) + timedelta(days=32)
-        prev_month = current_date.replace(day=current_date.day) - timedelta(days=1)
-
-        next_month_url = reverse('month_calendar', args=[next_month.year, next_month.month])
-        next_month_url += f'?holidays_set={holiday_name}' 
-        prev_month_url = reverse('month_calendar', args=[prev_month.year, prev_month.month])
-        prev_month_url += f'?holidays_set={holiday_name}'
-
-        # Fetch leave data for the current month
         leaves = LeaveRequest.objects.filter(
             datefrom__year=year,
             datefrom__month=month,
@@ -834,7 +799,67 @@ def month_calendar(request, year, month):
                 'confirmed': leave.is_approved,
                 'reason': leave.reason,
                 'leave_type': leave.leave_type,
+                'status': 'Approved' if leave.is_approved == 'Approved' else 'Unapproved',
             }
+        print(leave_data)
+
+        current_date = datetime(year, month, 1)
+        cal = calendar.monthcalendar(year, month)
+        month_calendar_html = "<table>"
+        month_calendar_html += "<tr><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th><th>Sun</th></tr>"
+
+        for week in cal:
+            month_calendar_html += "<tr>"
+            for day in week:
+                if day == 0:
+                    month_calendar_html += "<td></td>"
+                elif day == current_date.day and month == current_date.month and year == current_date.year:
+                    leave_info = leave_data.get(day, {})
+                    month_calendar_html += f"<td class='today'>{day}"
+                    
+                    if date(year, month, day) in holidays_set:
+                        # Display holiday information
+                        holiday_name = holidays_set.get(date(year, month, day), None)
+                        month_calendar_html += f"<br><span class='holiday-name'>{holiday_name}</span>"
+                    elif leave_info:
+                        # Display leave information
+                        month_calendar_html += f"<br><span class='leave-status'>{leave_info['status']}</span>"
+                    
+                    month_calendar_html += "</td>"
+                else:
+                    is_holiday = date(year, month, day) in holidays_set
+                    holiday_name = holidays_set.get(date(year, month, day), None)
+                    day_class = 'holiday' if is_holiday else ''
+                    day_class += ' sunday' if datetime(year, month, day).weekday() == 6 else ''  # Add 'sunday' class for Sundays
+                    month_calendar_html += f"<td class='{day_class}'>{day}"
+
+                    leave_info = leave_data.get(day, {})
+                    
+                    if leave_info:
+                        if leave_info['status'] == 'Approved':
+                            month_calendar_html += f"<br><span class='leave-status1'>{leave_info['status']}</span>"
+                        elif leave_info['status'] == 'Unapproved':
+                            month_calendar_html += f"<br><span class='leave-status'>{leave_info['status']}</span>"
+
+                    if holiday_name:
+                        month_calendar_html += f"<br><span class='holiday-name'>{holiday_name}</span>"
+                    month_calendar_html += "</td>"
+            month_calendar_html += "</tr>"
+
+
+        month_calendar_html += "</table>"
+
+        # Calculate the next and previous months
+        next_month = current_date.replace(day=current_date.day) + timedelta(days=32)
+        prev_month = current_date.replace(day=current_date.day) - timedelta(days=1)
+
+        next_month_url = reverse('month_calendar', args=[next_month.year, next_month.month])
+        next_month_url += f'?holidays_set={holiday_name}' 
+        prev_month_url = reverse('month_calendar', args=[prev_month.year, prev_month.month])
+        prev_month_url += f'?holidays_set={holiday_name}'
+
+        # Fetch leave data for the current month
+        
 
     context = {
         'month_calendar': month_calendar_html,
@@ -847,3 +872,14 @@ def month_calendar(request, year, month):
     }
 
     return render(request, 'calendar.html', context)
+
+def salarypayment(request,tid,empid):
+        acc= request.session['acc']
+        emp= employee.objects.get(id=empid)
+
+        paymentobj = payment(transactionid = tid, paymentstatus='paid',employee_id=emp.id)
+        paymentobj.save()
+        
+        send_mail = EmailMessage('Order Placed','Order Placed from Paws & Play Store',to=['pooja.shekhar21@gmail.com'] )
+        send_mail.send()
+        return render(request,'acclogin.html',{'accobj': acc,'payobj': paymentobj})

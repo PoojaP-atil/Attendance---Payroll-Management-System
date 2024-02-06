@@ -58,6 +58,7 @@ urlpatterns = [
     path('calculation/',views.calculation,name='calculation'),
     path('submit_leave_request/', views.submit_leave_request, name='submit_leave_request'),
     path('calculate_payment/', views.calculation1, name='calculate_payment'),
+    path('salarypayment/<str:tid>/<int:empid>/',views.salarypayment,name='salarypayment')
 
 
 ]

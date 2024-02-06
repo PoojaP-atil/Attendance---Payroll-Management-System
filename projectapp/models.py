@@ -96,3 +96,11 @@ class LeaveRequest(models.Model):
     datetill = models.DateField(max_length=200)
     is_approved = models.CharField(max_length=200,default='Unapproved')
 
+class payment(models.Model):
+    employee = models.ForeignKey(employee, on_delete=models.CASCADE)
+    paymentstatus = models.CharField(max_length = 100,default = 'pending')
+    transactionid = models.CharField(max_length = 200)
+    paymentmode = models.CharField(max_length = 100,default='paypal')
+
+    class Meta:
+        db_table = "payment"
