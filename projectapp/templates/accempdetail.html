@@ -72,6 +72,14 @@
             border-radius: 10%;
             margin-bottom: 20px;
         }
+        .button11 {
+            width: fit-content;
+            height: fit-content;
+            padding: 10px;
+            font-size: 15px;
+            border-radius: 10%;
+        }
+        
     </style>
 </head>
 
@@ -79,7 +87,7 @@
     <script src="https://www.paypal.com/sdk/js?client-id=test&currency=USD"></script>
     
     <script>
-        var amount = {{payment}}
+        var amount = {{paymentt}}
         function initPayPalButton() {
             document.getElementById("paypapl").style.visibility = "hidden";
             paypal.Buttons({
@@ -93,8 +101,7 @@
 
                     label: 'paypal',
 
-
-
+                    
                 },
 
 
@@ -136,7 +143,8 @@
 
                         // f.submit();
                         odata ={{empobj.id}};
-                    window.location.replace("http://127.0.0.1:8000/salarypayment/" + data + "/" + odata + "/");
+                        var month= "{{month}}";
+                    window.location.replace("http://127.0.0.1:8000/salarypayment/" + data + "/" + odata + "/"+month+"/");
 
 
 
@@ -224,14 +232,9 @@
 
 
     <div class="tablecontainer" id="tablecontainer">
-        
-        <div class="sale my-3">
-            <div id="paypal-button-container"></div>
-
-        </div>
-        <button onclick="initPayPalButton()" name="paypapl" id="paypapl" class="button1">Do payment</button>
         <!-- The table will be dynamically added here using JavaScript -->
     </div>
+    
     <script>
         function renderTable() {
             // Your rendering logic goes here
@@ -247,7 +250,7 @@
             var tr = document.createElement("tr");
 
             // Add table header cells
-            var headers = ["Number of Days Present", "Number of Days Absent", "Total Working Days", "Total Salary to be Paid"];
+            var headers = ["Number of Days Present", "Number of Days Absent", "Total Working Days", "Total Salary to be Paid",""];
             headers.forEach(function (headerText) {
                 var th = document.createElement("th");
                 th.textContent = headerText;
@@ -262,13 +265,23 @@
 
             // Create a sample row for demonstration
             var row = document.createElement("tr");
-            var sampleData = ["{{salary.present}}", "{{salary.absent}}", "{{salary.totalworkingdays}}", "{{salary.paymenttobepaid}}"];
+            var sampleData = ["{{salary.present}}", "{{salary.absent}}", "{{salary.totalworkingdays}}", "{{salary.paymenttobepaid}}",'<button onclick="initPayPalButton()" name="paypapl" id="paypapl" class="button11">Do Payment</button>'];
             sampleData.forEach(function (data) {
                 var td = document.createElement("td");
                 td.textContent = data;
                 row.appendChild(td);
             });
-
+            // Create a sample row for demonstration
+            var row = document.createElement("tr");
+            sampleData.forEach(function (data) {
+                var td = document.createElement("td");
+                if (data.includes("<button")) {
+                    td.innerHTML = data; // If data contains button HTML, set innerHTML
+                } else {
+                    td.textContent = data; // Otherwise, set textContent
+                }
+                row.appendChild(td);
+            });
             // Append the sample row to the tbody
             tbody.appendChild(row);
 
@@ -289,7 +302,11 @@
         }
     </script>
 
+<div class="sale my-3">
+            <div id="paypal-button-container" style="height: 50px; width: 200px; margin-left: 800px; margin-top: 20px;"></div>
+            
 
+        </div>
 </body>
 
 {% endblock %}

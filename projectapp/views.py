@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth.hashers import make_password,check_password
 from django.http import HttpResponse, HttpResponseBadRequest
-from projectapp.models import employee, hr,attendance, head,account,Event,accountant,LeaveRequest,payment
+from projectapp.models import employee, hr,attendance, head,account,accountant,LeaveRequest,payment
 from django.db.models import Q
 from datetime import datetime, timedelta, date
 from django.urls import reverse
@@ -528,7 +528,7 @@ def calculate_deduction(in_time, out_time, sal_per_day):
         return sal_per_day / 2
     return 0
 
-def calculation1(request, emp, atobj):
+def calculation1(request, emp, atobj, selected_month):
     present_count = 0
     absent_count = 0
     
@@ -541,49 +541,44 @@ def calculation1(request, emp, atobj):
 
     sal_per_day = emp.Salary / 22
     overall_salary = sal_per_day * 22
-    print(overall_salary)
-    print(f"{sal_per_day} sal per day")
 
     for i in atobj:
-        print(i)
-
         if i.status == 'Present':
             in_time = i.in_time
             out_time = i.out_time
             deduction = calculate_deduction(in_time, out_time, sal_per_day)
-            print(f"{deduction} deducted sal when late")
-            overall_salary = overall_salary - deduction
-            print(f"{overall_salary} present sal")
+            overall_salary -= deduction
 
         elif i.status == 'Absent':
-            overall_salary = overall_salary - sal_per_day
-            print(f"{overall_salary} absent sal")
+            overall_salary -= sal_per_day
 
         elif i.status == 'Causal Leave':
-            overall_salary = overall_salary - sal_per_day
-            print(f"{overall_salary} cl sal")
+            overall_salary -= sal_per_day
 
         elif i.status == 'Paid Leave':
-            overall_salary = overall_salary 
-            print(f"{overall_salary} pl sal")
+            pass  # No deduction for paid leave
 
         elif i.status == 'Sick Leave':
-            overall_salary = overall_salary - (overall_salary*0.3)
-            print(f"{overall_salary} sl sal")
+            overall_salary -= (overall_salary * 0.3)
 
-
-    a= overall_salary
-    print(f"{a} present absent total sal")
-
-    countobj = account(
-        present=present_count,
-        absent=absent_count,
-        employee_id=emp.id,
-        totalworkingdays=present_count + absent_count,
-        paymenttobepaid=a
+    # Retrieve or create the account object for the selected month
+    countobj, created = account.objects.get_or_create(
+        month=selected_month,
+        defaults={
+            'employee': emp,
+            'present': present_count,
+            'absent': absent_count,
+            'totalworkingdays': present_count + absent_count,
+            'paymenttobepaid':overall_salary,
+            'month': selected_month,
+        }
     )
+
+    # Update the payment to be paid
+    countobj.paymenttobepaid = overall_salary
     countobj.save()
-    return emp, atobj, countobj
+
+    return emp, atobj, countobj, selected_month
 
 #leave apply from user
 def submit_leave_request(request):
@@ -617,9 +612,8 @@ def hrshow(request, slug):
             hrobj= hr.objects.get(Email=hrs)
             emp= employee.objects.get(slug= slug)
             atobj= attendance.objects.filter(employee_id=emp.id)
-            emp, atobj, countobj = calculation1(request,emp,atobj)
-
-            return render(request, 'showattendancehr.html', {'hr': hrobj, 'attobj': atobj, 'salary': countobj,'empobj':emp})
+            return render(request, 'showattendancehr.html', {'hr': hrobj, 'attobj': atobj, 'empobj':emp})
+        
         elif request.method== "POST":
             hrs= request.session['hr']
             empobj= hr.objects.get(Email=hrs)
@@ -633,8 +627,8 @@ def hrshow(request, slug):
                 atobj = attendance.objects.filter(date__month=selected_month,employee_id=obj)
             else:
                 atobj = attendance.objects.filter(employee_id=obj)
-            emp, atobj, countobj = calculation1(request,emp,atobj)
-            return render(request,'showattendancehr.html',{'hr':empobj,'attobj':atobj,'empobj':emp,'salary':countobj})
+            emp, atobj, countobj, selected_month = calculation1(request,emp,atobj, selected_month)
+            return render(request,'showattendancehr.html',{'hr':empobj,'attobj':atobj,'empobj':emp,'salary':countobj,'month':countobj.month})
         
     elif 'head' in request.session:    
         if request.method == 'GET':
@@ -667,11 +661,8 @@ def accshow(request,slug):
             accobj= accountant.objects.get(Email= acc)
             emp= employee.objects.get(slug= slug)
             attobj= attendance.objects.filter(employee_id=emp.id)
-            emp, attobj, countobj = calculation1(request,emp,attobj)
-            payment1 = math.trunc(countobj.paymenttobepaid)
-            print(f"{payment1} payment1")
-
-            return render(request, 'accempdetail.html', {'acc': accobj, 'attobj': attobj, 'salary': countobj,'empobj':emp,'payment':payment1})
+            return render(request, 'accempdetail.html', {'acc': accobj, 'attobj': attobj, 'empobj':emp})
+        
         elif request.method== "POST":
             acc= request.session['acc']
             empobj= accountant.objects.get(Email=acc)
@@ -685,10 +676,11 @@ def accshow(request,slug):
                 attobj = attendance.objects.filter(date__month=selected_month,employee_id=obj)
             else:
                 attobj = attendance.objects.filter(employee_id=obj)
-            emp, attobj, countobj = calculation1(request,emp,attobj)
-            payment1 = math.trunc(countobj.paymenttobepaid)
-            print(f"{payment1} payment1")
-            return render(request,'accempdetail.html',{'acc':empobj,'attobj':attobj,'empobj':emp,'salary':countobj,'payment':payment1})
+            emp, attobj, countobj, selected_month = calculation1(request,emp,attobj,selected_month)
+            paymentt = math.trunc(countobj.paymenttobepaid)
+            print(f"{type(paymentt)} paymentt")
+            print(f"{type(countobj.month)} month")
+            return render(request,'accempdetail.html',{'acc':empobj,'attobj':attobj,'empobj':emp,'salary':countobj,'paymentt':paymentt,'month':countobj.month})
 
 def update(request, id):
     if 'hr' in request.session:
@@ -803,7 +795,7 @@ def month_calendar(request, year, month):
             }
         print(leave_data)
 
-        current_date = datetime(year, month, 1)
+        current_date = datetime.now()
         cal = calendar.monthcalendar(year, month)
         month_calendar_html = "<table>"
         month_calendar_html += "<tr><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th><th>Sun</th></tr>"
@@ -873,13 +865,29 @@ def month_calendar(request, year, month):
 
     return render(request, 'calendar.html', context)
 
-def salarypayment(request,tid,empid):
+def salarypayment(request,tid,empid,month):
         acc= request.session['acc']
         emp= employee.objects.get(id=empid)
+        payobj = account.objects.get(employee_id = empid,month=month)
+        current_date = datetime.now()
 
-        paymentobj = payment(transactionid = tid, paymentstatus='paid',employee_id=emp.id)
+        paymentobj = payment(transactionid = tid, paymentstatus='paid',employee_id=emp.id,month=month,salaryamount=payobj.paymenttobepaid)
         paymentobj.save()
-        
-        send_mail = EmailMessage('Order Placed','Order Placed from Paws & Play Store',to=['pooja.shekhar21@gmail.com'] )
-        send_mail.send()
-        return render(request,'acclogin.html',{'accobj': acc,'payobj': paymentobj})
+        obj = payment.objects.filter(employee_id = empid)
+        obj1 = payment.objects.get(transactionid=tid)
+
+        return render(request,'invoice.html',{'accobj': acc,'payobj': obj,'emp':emp,'current_date':current_date,'obj1':obj1})
+
+#user view
+def paymentdetails(request):
+        user= request.session['user']
+        empobj= employee.objects.get(Email=user)
+        payobj = payment.objects.filter(employee_id = empobj.id)
+        accobj = account.objects.filter(employee_id = empobj.id)
+        attobj = attendance.objects.all()  
+
+        context = {'attobj': attobj,'payobj':payobj,'user':empobj,'accobj':accobj}
+        return render(request, 'paymentdetails.html', context)
+
+def invoice(request):
+    return render(request,"invoice.html")

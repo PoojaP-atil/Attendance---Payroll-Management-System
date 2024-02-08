@@ -71,12 +71,6 @@ class attendance(models.Model):
     in_time = models.CharField(max_length=200,default='')
     out_time = models.CharField(max_length=200,default='')
 
-class Event(models.Model):
-    title = models.CharField(max_length=255)
-    date = models.DateField()
-
-    def __str__(self):
-        return f"{self.title} on {self.date}"
     
 class account(models.Model):
     employee = models.ForeignKey(employee, on_delete=models.CASCADE)
@@ -84,6 +78,7 @@ class account(models.Model):
     absent = models.IntegerField()
     totalworkingdays = models.IntegerField()
     paymenttobepaid = models.FloatField()
+    month = models.CharField(max_length=200,default=0)
 
     class Meta:
         db_table = 'account'
@@ -101,6 +96,8 @@ class payment(models.Model):
     paymentstatus = models.CharField(max_length = 100,default = 'pending')
     transactionid = models.CharField(max_length = 200)
     paymentmode = models.CharField(max_length = 100,default='paypal')
+    month = models.CharField(max_length=200,default=0)
+    salaryamount = models.FloatField(default=0)
 
     class Meta:
         db_table = "payment"
