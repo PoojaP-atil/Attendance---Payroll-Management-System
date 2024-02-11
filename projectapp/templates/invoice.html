@@ -17,7 +17,7 @@
             background-color: #fff;
             border-radius: 8px;
             padding: 30px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 0 20px  rgb(3, 106, 9);
         }
         .header {
             text-align: center;
@@ -25,7 +25,7 @@
         }
         .header h1 {
             margin: 0;
-            color: #333;
+            color: rgb(3, 106, 9);
             font-size: 32px;
         }
         .invoice-details, .bill-to, .services, .amount-due, .payment-terms, .thank-you {
@@ -35,20 +35,39 @@
         }
         .invoice-details p, .bill-to p, .services p, .amount-due p, .payment-terms p, .thank-you p {
             margin: 10px 0;
-            color: #555;
+            color: rgb(3, 106, 9);
         }
         .invoice-details p strong, .amount-due p strong {
-            color: #333;
+            color: rgb(3, 106, 9);
         }
         .bill-to h2, .services h2, .amount-due h2, .payment-terms h2 {
-            color: #333;
+            color:  rgb(3, 106, 9);
             margin-top: 0;
             font-size: 18px;
         }
         .thank-you {
             text-align: center;
             font-weight: bold;
-            color: #333;
+            color: rgb(3, 106, 9);
+        }
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .buttonaa {
+            background-color: #4CAF50;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .buttonaa:hover {
+            background-color: #45a049;
         }
     </style>
 </head>
@@ -58,32 +77,38 @@
             <h1>Salary Invoice</h1>
         </div>
         <div class="invoice-details">
-            <p><strong>Invoice Number:</strong> [Insert Invoice Number]</p>
-            <p><strong>Date:</strong> [Insert Date]</p>
+            
+            <p><strong>Date:</strong> {{current_date}}</p>
         </div>
         <div class="bill-to">
             <h2>Bill To:</h2>
-            <p>[Employee Name]</p>
-            <p>[Employee Address]</p>
-            <p>[City, State, Zip Code]</p>
+            <p>{{ emp.Name }}</p>
+            <p>{{ emp.Address }}</p>
+            
         </div>
         <div class="services">
-            <h2>Description of Services:</h2>
-            <p>Description of Salary for the Month of [Month, Year]</p>
-            <p>[Include any additional details or breakdown of the salary components]</p>
+            <h2>Description of Services :</h2>
+            <p>Salary for the Month of {{ obj1.month }} 2024</p>
         </div>
         <div class="amount-due">
-            <h2>Amount Due:</h2>
-            <p>$[Insert Total Salary Amount]</p>
+            <h2>Amount Paid :</h2>
+            <p>{{ obj1.salaryamount }}</p>
         </div>
         <div class="payment-terms">
-            <h2>Payment Terms:</h2>
-            <p>[Specify payment terms, e.g., "Due upon receipt"]</p>
+            <h2>Transaction ID :</h2>
+            <p>{{ obj1.transactionid }}</p>
         </div>
         <div class="thank-you">
-            <p>Thank you for your prompt payment!</p>
-            <p>[Your Name]</p>
-            <p>[Your Position]</p>
+            <p>Thank you </p>
+            <p>company name</p>
+            
+        </div>
+        <div class="button-container">
+            {% if user %}
+                <a href="{% url 'profile' %}" class="buttonaa">Back Home</a>
+            {% else %}
+                <a href="{% url 'acchome' %}" class="buttonaa">Back Home</a>
+            {% endif %}
         </div>
     </div>
 </body>

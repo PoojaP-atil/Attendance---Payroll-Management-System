@@ -795,7 +795,7 @@ def month_calendar(request, year, month):
             }
         print(leave_data)
 
-        current_date = datetime.now()
+        current_date = datetime(year,month,1)
         cal = calendar.monthcalendar(year, month)
         month_calendar_html = "<table>"
         month_calendar_html += "<tr><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th><th>Sun</th></tr>"
@@ -873,6 +873,9 @@ def salarypayment(request,tid,empid,month):
 
         paymentobj = payment(transactionid = tid, paymentstatus='paid',employee_id=emp.id,month=month,salaryamount=payobj.paymenttobepaid)
         paymentobj.save()
+        send_mail = EmailMessage('Salary',f'Dear User {emp.Name}{emp.id},\n\nYour salary for month:{month} has been credited to your account.\n\nTransaction ID: {tid}\nTotal Salary Amount: {payobj.paymenttobepaid}.\n\n If you have any questions or need assistance, feel free to contact us.\n\nBest regards,\nAttandance and Payroll Management System',to=['pooja.shekhar21@gmail.com'] )
+        send_mail.send()
+
         obj = payment.objects.filter(employee_id = empid)
         obj1 = payment.objects.get(transactionid=tid)
 
@@ -889,5 +892,5 @@ def paymentdetails(request):
         context = {'attobj': attobj,'payobj':payobj,'user':empobj,'accobj':accobj}
         return render(request, 'paymentdetails.html', context)
 
-def invoice(request):
-    return render(request,"invoice.html")
+def invoice(request,transactionid):
+    return render(request,"invoice.html",{'transactionid':transactionid})

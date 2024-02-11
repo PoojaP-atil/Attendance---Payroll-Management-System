@@ -60,8 +60,7 @@ urlpatterns = [
     path('calculate_payment/', views.calculation1, name='calculate_payment'),
     path('salarypayment/<str:tid>/<int:empid>/<str:month>/',views.salarypayment,name='salarypayment'),
     path('paymentdetails/', views.paymentdetails, name='paymentdetails'),
-    path('invoice/',views.invoice,name='invoice')
-
+    path('invoice/<str:transactionid>/', views.invoice, name='invoice'),
 
 ]
 if settings.DEBUG:

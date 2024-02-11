@@ -34,6 +34,18 @@
             font-size: 32 px;
             margin-left: 650px;
         }
+        .button-link {
+            background-color: #4CAF50;
+            color: #fff;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .button-link:hover {
+            background-color: #45a049;
+        }
     </style>
 </head>
 <body>
@@ -46,6 +58,7 @@
                 <th>Transaction ID</th>
                 <th>Total Salary</th>
                 <th>Payment Status</th>
+                <th>View Invoice</th>
             </tr>
         </thead>
         <tbody>
@@ -92,6 +105,7 @@
                 <td>{{ i.transactionid }}</td>
                 <td>{{ i.salaryamount }}</td>
                 <td>{{ i.paymentstatus }}</td>
+                <td><a href="{% url 'invoice' i.transactionid %}" class="button-link">View Invoice</a></td>
             </tr>
             {% endfor %}
         </tbody>
