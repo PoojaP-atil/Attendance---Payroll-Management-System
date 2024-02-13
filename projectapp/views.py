@@ -871,7 +871,7 @@ def salarypayment(request,tid,empid,month):
         payobj = account.objects.get(employee_id = empid,month=month)
         current_date = datetime.now()
 
-        paymentobj = payment(transactionid = tid, paymentstatus='paid',employee_id=emp.id,month=month,salaryamount=payobj.paymenttobepaid)
+        paymentobj = payment(transactionid = tid, paymentstatus='paid',employee_id=emp.id,month=month,salaryamount=int(payobj.paymenttobepaid))
         paymentobj.save()
         send_mail = EmailMessage('Salary',f'Dear User {emp.Name}{emp.id},\n\nYour salary for month:{month} has been credited to your account.\n\nTransaction ID: {tid}\nTotal Salary Amount: {payobj.paymenttobepaid}.\n\n If you have any questions or need assistance, feel free to contact us.\n\nBest regards,\nAttandance and Payroll Management System',to=['pooja.shekhar21@gmail.com'] )
         send_mail.send()
@@ -893,4 +893,11 @@ def paymentdetails(request):
         return render(request, 'paymentdetails.html', context)
 
 def invoice(request,transactionid):
-    return render(request,"invoice.html",{'transactionid':transactionid})
+        user= request.session['user']
+        emp= employee.objects.get(Email=user)
+        current_date = datetime.now()
+
+        obj = payment.objects.filter(employee_id=emp.id)
+        obj1 = payment.objects.get(transactionid=transactionid)
+
+        return render(request,'invoice.html',{'user': user,'payobj': obj,'emp':emp,'current_date':current_date,'obj1':obj1})

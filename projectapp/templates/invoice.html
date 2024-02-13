@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -50,25 +50,7 @@
             font-weight: bold;
             color: rgb(3, 106, 9);
         }
-        .button-container {
-            text-align: center;
-            margin-top: 20px;
-        }
-
-        .buttonaa {
-            background-color: #4CAF50;
-            color: #fff;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            text-decoration: none;
-            transition: background-color 0.3s ease;
-        }
-
-        .buttonaa:hover {
-            background-color: #45a049;
-        }
+        
     </style>
 </head>
 <body>
@@ -100,15 +82,8 @@
         </div>
         <div class="thank-you">
             <p>Thank you </p>
-            <p>company name</p>
+            <p><img src="{% static 'images/logo.png' %}" style="height: 90px; width: 9.37rem;"></p>
             
-        </div>
-        <div class="button-container">
-            {% if user %}
-                <a href="{% url 'profile' %}" class="buttonaa">Back Home</a>
-            {% else %}
-                <a href="{% url 'acchome' %}" class="buttonaa">Back Home</a>
-            {% endif %}
         </div>
     </div>
 </body>
