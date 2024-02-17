@@ -1,0 +1,74 @@
+{% extends 'hrmain.html' %}
+{% block mycontent %}
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <style>
+        table {
+            overflow: hidden;
+            border-collapse: collapse;
+            margin-left: 280px;
+            width: 80%;
+            margin-left: 280px;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #2d6f30;
+            color: #ddd;
+        }
+        button {
+            width: fit-content;
+            height: fit-content;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h2 style="margin-left: 750px; font-size: 36px; padding: 30px; color: #2d6f30;">Leave Approval System</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Employee ID</th>
+                <th>Employee Name</th>
+                <th>Leave From</th>
+                <th>Leave Till</th>
+                <th>Type of Leave</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                {% for i in leave %}
+                    <td>{{ i.employee_id }}</td>
+                    <td>{{ i.employee.Name }}</td>
+                    <td>{{ i.datefrom }}</td>
+                    <td>{{ i.datetill }}</td>
+                    <td>{{ i.leave_type }}</td>
+                    <td>
+                        {% if i.is_approved == 'Approved' %}
+                        Approved
+                        {% else %}
+                        <form action="{% url 'approve' i.id %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit">Approve</button>
+                        </form>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+    </table>
+</body>
+</html>
+{% endblock %}

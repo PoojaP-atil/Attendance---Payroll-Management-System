@@ -603,6 +603,25 @@ def submit_leave_request(request):
         attobj1 = attendance(date = datef,in_time = in_time , out_time = out_time, employee_id=empobj.id,status=leave_type1)
         attobj1.save()
         return render(request,"showattendance.html",{'user':empobj,'attobj':attobj})
+    
+#section head approval for employees leave
+def leave_approval(request):
+    if 'head' in request.session:  
+        head1= request.session['head']
+        headobj = head.objects.get(Email = head1)
+        leave_request = LeaveRequest.objects.filter(employee_id__Head = headobj.Name)
+        return render(request,'leave_approval.html',{'leave':leave_request,'head':headobj})
+    
+def approve(request,id):
+    if 'head' in request.session: 
+        if request.method == 'POST': 
+            head1= request.session['head']
+            headobj = head.objects.get(Email = head1)
+            leave_request = LeaveRequest.objects.filter(employee_id__Head = headobj.Name)
+            empobj = LeaveRequest.objects.get(id=id)
+            empobj.is_approved='Approved'
+            empobj.save()
+            return render(request,'leave_approval.html',{'leave':leave_request,'head':headobj})
 
 #hr and head can view attendance list
 def hrshow(request, slug):
@@ -783,6 +802,7 @@ def month_calendar(request, year, month):
             datefrom__month=month,
             datetill__year=year,
             datetill__month=month,
+            employee = empobj.id,
         )
 
         leave_data = {}
@@ -901,3 +921,4 @@ def invoice(request,transactionid):
         obj1 = payment.objects.get(transactionid=transactionid)
 
         return render(request,'invoice.html',{'user': user,'payobj': obj,'emp':emp,'current_date':current_date,'obj1':obj1})
+
