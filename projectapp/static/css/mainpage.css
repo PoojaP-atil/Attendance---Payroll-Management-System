@@ -118,18 +118,7 @@ div h1 {
     top: 1.25rem;
 }
 
-.welcome {
-    position: absolute;
-    top: 6.62rem;
-    left: 25rem;
-    color: rgb(3, 106, 9);
-    font-size: 3.7rem;
-    font-family: paytone one;
-    text-shadow: 0.12rem 0.12rem lightblue;
-    font-weight: bold;
-    margin-top: auto;
-    margin-bottom: auto;
-}
+
 
 div p {
     color: rgb(19, 46, 2);
@@ -454,3 +443,4 @@ div ul li a {
     transition: background-color 0.3s ease;
   
   }
+

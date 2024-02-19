@@ -30,7 +30,7 @@ def EmpListView(request):
         empobj = accountant.objects.get(Email = acc)
         employ = employee.objects.all()
         print(acc)
-        return render(request,'acchome.html',{'head':empobj,'employ':employ})
+        return render(request,'acchome.html',{'acc':empobj,'employ':employ})
 
 def EmpDetailView(request,slug):
     if 'hr' in request.session:
@@ -773,13 +773,12 @@ def hrheadhome(request):
     elif 'acc' in request.session:
         acc = request.session['acc']
         accobj = accountant.objects.get(Email =acc)
-        return render(request,'hrheadhome.html',{'head':accobj})
+        return render(request,'hrheadhome.html',{'acc':accobj})
     
 
 #calendar with holiday and leaves to 
 def get_holidays(year, country='IN'):
     return holidays.CountryHoliday(country, years=year)
-
 
 def month_calendar(request, year, month):
     if 'user' in request.session:
@@ -893,13 +892,16 @@ def salarypayment(request,tid,empid,month):
 
         paymentobj = payment(transactionid = tid, paymentstatus='paid',employee_id=emp.id,month=month,salaryamount=int(payobj.paymenttobepaid))
         paymentobj.save()
-        send_mail = EmailMessage('Salary',f'Dear User {emp.Name}{emp.id},\n\nYour salary for month:{month} has been credited to your account.\n\nTransaction ID: {tid}\nTotal Salary Amount: {payobj.paymenttobepaid}.\n\n If you have any questions or need assistance, feel free to contact us.\n\nBest regards,\nAttandance and Payroll Management System',to=['pooja.shekhar21@gmail.com'] )
-        send_mail.send()
 
         obj = payment.objects.filter(employee_id = empid)
         obj1 = payment.objects.get(transactionid=tid)
+        month_number = int(paymentobj.month)
+        month_name = calendar.month_name[month_number]
+        print(month_name)
+        send_mail = EmailMessage('Salary',f'Dear User {emp.Name}{emp.id},\n\nYour salary for month:{month_name} has been credited to your account.\n\nTransaction ID: {tid}\nTotal Salary Amount: {payobj.paymenttobepaid}.\n\n If you have any questions or need assistance, feel free to contact us.\n\nBest regards,\nAttandance and Payroll Management System',to=['pooja.shekhar21@gmail.com'] )
+        send_mail.send()
 
-        return render(request,'invoice.html',{'accobj': acc,'payobj': obj,'emp':emp,'current_date':current_date,'obj1':obj1})
+        return render(request,'invoice.html',{'accobj': acc,'payobj': obj,'emp':emp,'current_date':current_date,'obj1':obj1,'month_name':month_name})
 
 #user view
 def paymentdetails(request):
