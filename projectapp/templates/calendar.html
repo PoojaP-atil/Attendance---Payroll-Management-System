@@ -39,8 +39,9 @@
         }
 
         td.today {
-            background-color: #ffd700;  /* Yellow color for today's date */
+            background-color: gold;
         }
+        
 
         td.holiday {
             background-color: #ff6666; /* Red color for holidays */
@@ -78,7 +79,7 @@
 
     <h1>{{ current_date|date:'F' }}</h1>
 
-    <p>Current Date: {{ current_date }}
+    <p>Current Date: {{ c }}
 
         <a class="a" style="margin-left: 900px;" href="{{ prev_month }}">Previous Month</a>
         <a class="a" href="{{ next_month }}">Next Month</a>

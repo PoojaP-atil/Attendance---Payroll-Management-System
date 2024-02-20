@@ -815,6 +815,7 @@ def month_calendar(request, year, month):
         print(leave_data)
 
         current_date = datetime(year,month,1)
+        c = datetime.now()
         cal = calendar.monthcalendar(year, month)
         month_calendar_html = "<table>"
         month_calendar_html += "<tr><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th><th>Sun</th></tr>"
@@ -824,7 +825,7 @@ def month_calendar(request, year, month):
             for day in week:
                 if day == 0:
                     month_calendar_html += "<td></td>"
-                elif day == current_date.day and month == current_date.month and year == current_date.year:
+                elif day == c.day and month == c.month and year == c.year:
                     leave_info = leave_data.get(day, {})
                     month_calendar_html += f"<td class='today'>{day}"
                     
@@ -877,6 +878,7 @@ def month_calendar(request, year, month):
         'next_month': next_month_url,
         'prev_month': prev_month_url,
         'current_date': current_date,
+        'c':c,
         'leave_data': leave_data,
         'attobj':attobj,
         'user':empobj,
